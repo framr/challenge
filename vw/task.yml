@@ -1,0 +1,36 @@
+task_id: my_task1
+click_field: click
+weight_field:
+mode: auto
+min_shows: 5
+
+feature_map:
+feature_stats:
+
+learn:
+  namespaces:
+    - ad_id
+  quadratic:
+    - [ad_id, document_id]
+  cubic:
+
+  learn_file:
+
+  vw:
+    num_bits: 25
+    loss: logistic
+    passes: 300
+    l2:
+    l1:
+    learn_method: "--bfgs"
+    manual_bias: false
+    learn_options: "--holdout_off --termination 0.0"
+
+  crr:
+    group_key: display_id
+    active: false
+    crr_alpha: 0.9
+
+test:
+  test_file:
+
