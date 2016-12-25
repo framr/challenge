@@ -23,7 +23,7 @@ def read_feature_stats(filename):
     return feature_stats
 
 
-def compute_feature_stats(csv_file, task):
+def compute_feature_stats(csv_file, task, ns_join_sentinel="^"):
 
     emitter = FeatureEmitter(task)
 
@@ -33,14 +33,23 @@ def compute_feature_stats(csv_file, task):
             features_list = emitter(example)
 
             for ns, features in features_list:
-                for fid in features:
-                    feature_stats[ns][fid] = feature_stats[ns].get(fid, 0) + 1
+
+                if not isinstance(ns, tuple):
+                    for fid in features:
+                        feature_stats[ns][fid] = feature_stats[ns].get(fid, 0) + 1
+                else: # polynomial features 
+                    composite_ns = ns_join_sentinel.join(ns)
+                    for fid in features:
+                        composite_fid = ns_join_sentinel.join(fid)
+                        feature_stats[composite_ns][composite_fid] = feature_stats[composite_ns].get(
+                            composite_fid, 0) + 1
 
     return feature_stats
 
-def create_feature_stats_file(csv_file, task, outfile):
 
-    stats = compute_feature_stats(csv_file, task)
+def create_feature_stats_file(csv_file, task, outfile, ns_join_sentinel="^"):
+
+    stats = compute_feature_stats(csv_file, task, ns_join_sentinel=ns_join_sentinel)
     with open(outfile, "w") as out:
         out.write("namespace,feature,shows\n")
         for ns, ns_stats in stats.iteritems():
@@ -50,7 +59,7 @@ def create_feature_stats_file(csv_file, task, outfile):
 
 
 class FeatureEmitter(object):
-    def __init__(self, task, separator=","):
+    def __init__(self, task, separator=",", ns_join_sentinel="^"):
         """
         Args:
             task: config describing features
@@ -59,7 +68,8 @@ class FeatureEmitter(object):
         self._namespaces = task["learn"]["namespaces"] or []
         self._quadratic = task["learn"]["quadratic"] or []
         self._cubic = task["learn"]["cubic"] or []
-        self._separator = ","
+        self._separator = separator
+        self._ns_join_sentinel = ns_join_sentinel
 
     def __call__(self, example):
         """
@@ -83,7 +93,7 @@ class FeatureEmitter(object):
         for first, second in self._quadratic:
             result.append(
                 (
-                    self._separator.join([first, second]),
+                    (first, second),
                     list(product(
                         getattr(example, first).split(self._separator),
                         getattr(example, second).split(self._separator)
@@ -91,11 +101,10 @@ class FeatureEmitter(object):
                 )
             )
 
-
         for first, second, third in self._cubic:
             result.append(
                 (
-                    self._separator.join([first, second, third]),
+                    (first, second, third),
                     list(product(
                         product(
                             getattr(example, first).split(self._separator),
