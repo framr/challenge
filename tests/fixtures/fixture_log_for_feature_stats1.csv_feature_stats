@@ -1,0 +1,9 @@
+namespace,feature,shows
+ad_id,1,2
+ad_id,2,2
+ad_id,3,2
+ad_id,5,1
+ad_id,6,1
+ad_id,7,5
+document_id,1,8
+document_id,2,4
