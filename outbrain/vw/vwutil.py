@@ -1,4 +1,5 @@
 from collections import namedtuple, defaultdict
+from itertools import product
 
 from ..csvutil.reader import csv_file_iter
 
@@ -46,13 +47,18 @@ def create_feature_stats_file(csv_file, task, outfile):
                 outfile.write("%s,%s,%s\n" % (ns, feature, shows))
 
 
+
 class FeatureEmitter(object):
-    def __init__(self, task):
+    def __init__(self, task, separator=","):
         """
         Args:
             task: config describing features
         """
         self._task = task
+        self._namespaces = task["learn"]["namespaces"]
+        self._quadratic = task["learn"]["quadratic"]
+        self._cubic = task["learn"]["cubic"]
+        self._separator = ","
 
     def __call__(self, example):
         """
@@ -62,5 +68,46 @@ class FeatureEmitter(object):
             dict {"namespace1" : [f1, f2], "namespace2,namespace3": [f3, f5]}
             list [("namespace1", [f1, f2, f3]), ()]?
         """
-        pass
+
+        result = []
+        for ns in self._namespaces:
+            result.append(
+                tuple(
+                    ns,
+                    getattr(example, ns).split(self._separator)
+                )
+            )
+
+
+        for first, second in self._quadratic:
+            result.append(
+                tuple(
+                    self._separator.join([first, second]),
+                    list(product(
+                        getattr(example, first).split(self._separator),
+                        getattr(example, second).split(self._separator)
+                    ))
+                )
+            )
+
+
+        for first, second, third in self._cubic:
+            result.append(
+                tuple(
+                    self._separator.join([first, second, third]),
+                    list(product(
+                        product(
+                            getattr(example, first).split(self._separator),
+                            getattr(example, second).split(self._separator),
+                        ),
+                        getattr(example, third).split(self._separator)
+                    ))
+                )
+            )
+
+        return result
+
+
+
+
 

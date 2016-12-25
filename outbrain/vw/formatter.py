@@ -38,7 +38,7 @@ Including a feature but omitting its value means that its value is 1.
 """
 
 from ..csvutil.reader import csv_file_iter
-from .vwutil import FeatureEmitter, read_feature_stats
+from vw.vwutil import FeatureEmitter, read_feature_stats
 from cStringIO import StringIO
 
 
