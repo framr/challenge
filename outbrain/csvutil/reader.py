@@ -18,5 +18,6 @@ def csv_file_iter(infile):
     meta = infile.readline().strip()
     example_cls = make_example_cls(meta)
     for line in csv.reader(infile):
-        yield example_cls(line)
+#        print line, meta
+        yield example_cls(*line)
 

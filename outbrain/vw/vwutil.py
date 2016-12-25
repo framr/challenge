@@ -17,8 +17,8 @@ def read_feature_stats(filename):
 
     feature_stats = defaultdict(dict)
     with open(filename) as infile:
-        for example in csv_file_iter(filename):
-            feature_stats[example.namespace][example.feature_id] = example.shows
+        for example in csv_file_iter(infile):
+            feature_stats[example.namespace][example.feature] = int(example.shows)
 
     return feature_stats
 
@@ -29,13 +29,14 @@ def compute_feature_stats(csv_file, task):
 
     feature_stats = defaultdict(dict)
     with open(csv_file) as infile:
-        for example in csv_file_iter(csv_file):
+        for example in csv_file_iter(infile):
             features_list = emitter(example)
 
             for ns, features in features_list:
                 for fid in features:
                     feature_stats[ns][fid] = feature_stats[ns].get(fid, 0) + 1
 
+    return feature_stats
 
 def create_feature_stats_file(csv_file, task, outfile):
 
@@ -55,9 +56,9 @@ class FeatureEmitter(object):
             task: config describing features
         """
         self._task = task
-        self._namespaces = task["learn"]["namespaces"]
-        self._quadratic = task["learn"]["quadratic"]
-        self._cubic = task["learn"]["cubic"]
+        self._namespaces = task["learn"]["namespaces"] or []
+        self._quadratic = task["learn"]["quadratic"] or []
+        self._cubic = task["learn"]["cubic"] or []
         self._separator = ","
 
     def __call__(self, example):
@@ -72,7 +73,7 @@ class FeatureEmitter(object):
         result = []
         for ns in self._namespaces:
             result.append(
-                tuple(
+                (
                     ns,
                     getattr(example, ns).split(self._separator)
                 )
@@ -81,7 +82,7 @@ class FeatureEmitter(object):
 
         for first, second in self._quadratic:
             result.append(
-                tuple(
+                (
                     self._separator.join([first, second]),
                     list(product(
                         getattr(example, first).split(self._separator),
@@ -93,7 +94,7 @@ class FeatureEmitter(object):
 
         for first, second, third in self._cubic:
             result.append(
-                tuple(
+                (
                     self._separator.join([first, second, third]),
                     list(product(
                         product(
