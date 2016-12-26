@@ -59,7 +59,7 @@ def create_feature_stats_file(csv_file, task, outfile, ns_join_sentinel="^"):
 
 
 class FeatureEmitter(object):
-    def __init__(self, task, separator=",", ns_join_sentinel="^"):
+    def __init__(self, task, separator=",", feature_separator=" ", ns_join_sentinel="^"):
         """
         Args:
             task: config describing features
@@ -69,6 +69,7 @@ class FeatureEmitter(object):
         self._quadratic = task["learn"]["quadratic"] or []
         self._cubic = task["learn"]["cubic"] or []
         self._separator = separator
+        self._feature_separator = feature_separator
         self._ns_join_sentinel = ns_join_sentinel
 
     def __call__(self, example):
@@ -85,7 +86,7 @@ class FeatureEmitter(object):
             result.append(
                 (
                     ns,
-                    getattr(example, ns).split(self._separator)
+                    getattr(example, ns).split(self._feature_separator)
                 )
             )
 
@@ -95,8 +96,8 @@ class FeatureEmitter(object):
                 (
                     (first, second),
                     list(product(
-                        getattr(example, first).split(self._separator),
-                        getattr(example, second).split(self._separator)
+                        getattr(example, first).split(self._feature_separator),
+                        getattr(example, second).split(self._feature_separator)
                     ))
                 )
             )
@@ -107,10 +108,10 @@ class FeatureEmitter(object):
                     (first, second, third),
                     list(product(
                         product(
-                            getattr(example, first).split(self._separator),
-                            getattr(example, second).split(self._separator),
+                            getattr(example, first).split(self._feature_separator),
+                            getattr(example, second).split(self._feature_separator),
                         ),
-                        getattr(example, third).split(self._separator)
+                        getattr(example, third).split(self._feature_separator)
                     ))
                 )
             )

@@ -38,7 +38,7 @@ Including a feature but omitting its value means that its value is 1.
 """
 
 from ..csvutil.reader import csv_file_iter
-from vw.vwutil import FeatureEmitter, read_feature_stats
+from .vwutil import FeatureEmitter, read_feature_stats
 from cStringIO import StringIO
 
 
@@ -102,22 +102,26 @@ class VWAutoFormatter(VWFormatter):
     def __call__(self, examples):
 
         buffer = StringIO()
-        for example in examples:
+        for num_example, example in enumerate(examples):
+            print getattr(example, self._click_field)
             buffer.write("%s " % getattr(example, self._click_field))
             for ns in self._namespaces:
                 features = getattr(example, ns)
+
+                print "|%s|%s|" % (ns, features)
 
                 if self._min_shows > 1:
                     # optionally filter features with low statistics
                     features = [f for f in features
                                 if self._feature_stats[ns].get(f, 0) >= self._min_shows]
-                    buffer.write("|%s %s" % (ns, " ".join(features)))
+                    buffer.write("|%s %s" % (ns, features))
                 else:
-                    buffer.write("|%s %s" % (ns, " ".join(features)))
+                    buffer.write("|%s %s" % (ns, features))
 
-            buffer.write("\n")
+            if num_example + 1 < len(examples):
+                buffer.write("\n")
 
-        yield buffer.getvalue()
+        return buffer.getvalue()
 
         # in the auto mode bias we use automatic bias provided by vowpal wabbit
 
