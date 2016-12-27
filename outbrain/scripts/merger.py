@@ -8,8 +8,6 @@ from tempfile import NamedTemporaryFile
 import csv
 
 
-SEPARATOR = ","
-
 def add_columns_and_strip_header(infilename, outfilename, add_columns=None, separator=","):
     """
     Extend csv file with new columns and remove header
@@ -69,10 +67,12 @@ if __name__ == '__main__':
             # which file example belongs to.
             # We also strip headers for unix sort to work properly
             train_header = add_columns_and_strip_header(
-                args.train, train.name, add_columns=[["is_train", "1"]]
+                args.train, train.name, add_columns=[["is_train", "1"]],
+                separator=args.separator
             )
             test_header = add_columns_and_strip_header(
-                args.test, test.name, add_columns=[["clicked", "0"], ["is_train", "0"]]
+                args.test, test.name, add_columns=[["clicked", "0"], ["is_train", "0"]],
+                separator=args.separator
             )
 
             print "Resulting train header %s" % train_header
@@ -88,7 +88,7 @@ if __name__ == '__main__':
 
             # Write header to output file
             with open(args.output, "w") as outfile:
-                outfile.write("%s\n" % SEPARATOR.join(train_header))
+                outfile.write("%s\n" % args.separator.join(train_header))
 
 
             sort_cmd = 'sort %s -k %d,%d --field-separator="%s" >> %s' % (
