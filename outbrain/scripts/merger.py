@@ -64,6 +64,10 @@ if __name__ == '__main__':
 
     with NamedTemporaryFile() as train:
         with NamedTemporaryFile() as test:
+
+            # We first convert train and test to common format with additional column identifying
+            # which file example belongs to.
+            # We also strip headers for unix sort to work properly
             train_header = add_columns_and_strip_header(
                 args.train, train.name, add_columns=[["is_train", "1"]]
             )
@@ -82,6 +86,7 @@ if __name__ == '__main__':
             columns_mapping = dict((column, index + 1) for index, column in enumerate(train_header))
             sort_column_index = columns_mapping[args.sort_column]
 
+            # Write header to output file
             with open(args.output, "w") as outfile:
                 outfile.write("%s\n" % SEPARATOR.join(train_header))
 
@@ -90,11 +95,13 @@ if __name__ == '__main__':
                 args.sort_args, sort_column_index, sort_column_index, args.separator, args.output)
             print "command for sorting: %s" % sort_cmd
 
+            # Now merge preprocessed train and test and run unix sort on it
             proc1 = Popen("cat %s %s" % (train.name, test.name), stdout=PIPE, shell=True)
             proc2 = Popen(sort_cmd, stdin=proc1.stdout, shell=True)
 
             proc1.stdout.close() # Allow proc1 to receive a SIGPIPE if proc2 exits. WTF???
             stdout, stderr = proc2.communicate()
+
             print stdout
             print stderr
 
