@@ -1,26 +1,26 @@
 from itertools import groupby
 
 
-def preprocess_table_for_crr(filename, task):
+from ..csvutil.reader import csv_file_iter
+
+
+def preprocess_table_for_crr(infilename, outfilename, task):
     """
     Args:
-        filename: sorted by group key
+        infilename: sorted by group key
         task:
 
     Returns:
-
     """
-
     pass
 
 
-
-def emit_crr_pairs(group, task):
+def expand_crr_pairs(examples_group, task):
 
     clicked_examples = []
     notclicked_examples = []
 
-    for example in group:
+    for example in examples_group:
         if int(getattr(example, task['click_field'])) == 1:
             clicked_examples.append(example)
         else:
@@ -28,8 +28,12 @@ def emit_crr_pairs(group, task):
 
     for clicked in clicked_examples:
         for not_clicked in notclicked_examples:
-            pass
+            yield (clicked, not_clicked)
 
+
+
+def calculate_crr_features():
+    pass
 
 
 

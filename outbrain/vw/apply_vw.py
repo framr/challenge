@@ -14,7 +14,7 @@ class VWPredictor(object):
 
 class VWAutoPredictor(VWPredictor):
 
-    def __init__(self):
+    def __init__(self, model_path):
         self._model_path = model_path
 
     def apply(self, learn_log, output_log):

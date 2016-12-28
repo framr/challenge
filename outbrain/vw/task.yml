@@ -1,7 +1,6 @@
 task_id: my_task1
 click_field: click
 weight_field:
-mode: auto
 min_shows: 5
 
 feature_map:
@@ -25,6 +24,7 @@ learn:
     learn_method: "--bfgs"
     manual_bias: false
     learn_options: "--holdout_off --termination 0.0"
+    hashing_mode: auto
 
   crr:
     group_key: display_id

@@ -27,6 +27,8 @@ def get_vw_launch_args(task):
     if vw_opts["learn_options"] is not None:
         args.extend([vw_opts["learn_options"]])
 
+    if task["hashing"]
+
 
     return " ".join(map(str, args))
 
