@@ -37,16 +37,23 @@ for that example. Omitting a feature means that its value is zero.
 Including a feature but omitting its value means that its value is 1.
 """
 
-from ..csvutil.reader import csv_file_iter
-from .vwutil import FeatureEmitter, read_feature_stats
 from cStringIO import StringIO
+from .crr import expand_crr_pairs
+
+from ..csvutil.reader import csv_file_iter
+from .feature import FeatureEmitter
+from .vwutil import read_feature_stats, read_feature_map
+from .vwhash import truncate_to_num_bits
 
 
 def get_vw_formatter(task):
-    if task['mode'] == 'auto':
+    if task['learn']['vw']['hashing_mode'] == 'auto':
         formatter = VWAutoFormatter(task)
-    else:
+    elif task['learn']['vw']['hashing_mode'] == 'manual':
         formatter = VWManualFormatter(task)
+    else:
+        raise NotImplementedError
+
     return formatter
 
 
@@ -98,12 +105,143 @@ class VWAutoFormatter(VWFormatter):
         if self._min_shows > 1:
             self._feature_stats = read_feature_stats(self._feature_stats_filename)
 
+        if task["learn"]["vw"].get("manual_bias", False):
+            raise NotImplementedError("manual bias currently not supported in VWAutoFormatter")
+
+        self._feature_separator = task.get("log_config", {}).get("feature_separator", None)
+
 
     def __call__(self, examples):
 
         buffer = StringIO()
         for num_example, example in enumerate(examples):
-            print getattr(example, self._click_field)
+            #print getattr(example, self._click_field)
+            buffer.write("%s " % getattr(example, self._click_field))
+            for ns in self._namespaces:
+                features = getattr(example, ns).strip().split(self._feature_separator)
+
+                if self._min_shows > 1:
+                    # optionally filter features with low statistics
+                    features = [f for f in features
+                                if self._feature_stats[ns].get(f, 0) >= self._min_shows]
+                    buffer.write("|%s %s" % (ns, " ".join(features)))
+                else:
+                    buffer.write("|%s %s" % (ns, " ".join(features)))
+
+            if num_example + 1 < len(examples):
+                buffer.write("\n")
+
+        # in the auto mode bias we use automatic bias provided by vowpal wabbit
+        return buffer.getvalue()
+
+
+
+class VWManualFormatter(VWFormatter):
+    """
+    This formatter manually creates quadratic and cubic features for vowpal wabbit
+    and puts them into anonymous namespace
+
+    The rare filtering feature works different than in the case of automatic regime:
+    here we accept feature if it is present in feature map, otherwise it is rejected
+    """
+
+    def __init__(self, task):
+        self._feature_emitter = FeatureEmitter(task)
+        self._feature_map_file = task["feature_map"]
+
+        print "reading feature map file from %s" % self._feature_map_file
+        self._feature_map = read_feature_map(self._feature_map_file)
+
+        self._task = task
+        self._click_field = task["click_field"]
+
+        self._num_bits = task["learn"]["vw"]["num_bits"]
+        #self._namespaces = task["learn"]["namespaces"]
+        #self._quadratic = task["learn"]["quadratic"]
+        #self._cubic = task["learn"]["cubic"]
+
+        if task["learn"]["vw"].get("auto_bias", False):
+            raise NotImplementedError("Automatic bias is not supported in VWAutoFormatter")
+
+        if task["learn"]["vw"]["hashing_mode"] != "manual":
+            raise ValueError("Manual formatter supports hashing_mode = manual only")
+
+        self._feature_separator = task.get("log_config", {}).get("feature_separator", None)
+
+    def _process_example(self, example):
+        """
+        get vw line for single example
+        Args:
+            example:
+        Returns:
+        """
+
+        buffer = StringIO()
+        example_features = self._feature_emitter(example)
+        for namespace, ns_features in example_features:
+
+            # truncation to num_bits is somewhat excessive here
+            # we use it here for clarity (?)
+            features = [str(truncate_to_num_bits(int(self._feature_map[namespace][feature])))
+                        for feature in ns_features
+                            if feature in self._feature_map[namespace]
+            ]
+            buffer.write("%s " % " ".join(features))
+
+        return buffer.getvalue()
+
+    def __call__(self, examples):
+
+        result = []
+        for num_example, example in enumerate(examples):
+            example_vw_line = self._process_example(example)
+            buffer.write("%s| %s" % (getattr(example, self._click_field), example_vw_line))
+
+            if num_example + 1 < len(examples): # write EOL always except for the last example
+                buffer.write("\n")
+
+        # TODO: Write bias to vw_line here!!!
+        return buffer.getvalue()
+
+
+class VWCRRManualFormatter(object):
+
+    def __init__(self, task):
+        self._task = task
+        self._click_field = task["click_field"]
+        self._namespaces = task["learn"]["namespaces"]
+        self._quadratic = task["learn"]["quadratic"]
+        self._cubic = task["learn"]["cubic"]
+
+        self._min_shows = task.get('min_shows', 1)
+        self._feature_stats_filename = task.get("feature_stats", None)
+        self._feature_stats = None
+        if self._min_shows > 1:
+            self._feature_stats = read_feature_stats(self._feature_stats_filename)
+
+        self._crr_alpha = task["learn"]["crr"]["crr_alpha"]
+        self._crr_key = task["learn"]["crr"]["group_key"]
+
+        if task["learn"]["vw"]["hashing_mode"] != "manual":
+            raise ValueError("")
+
+
+    def __call__(self, examples):
+        """
+        Args:
+            self:
+            examples: A group of examples
+
+        Returns:
+        # Create vw lines for normal examples
+        # using FeatureEmitter
+
+        # Create vw lines for
+        """
+
+        buffer = StringIO()
+        for num_example, example in enumerate(examples):
+            #print getattr(example, self._click_field)
             buffer.write("%s " % getattr(example, self._click_field))
             for ns in self._namespaces:
                 features = getattr(example, ns)
@@ -123,17 +261,5 @@ class VWAutoFormatter(VWFormatter):
 
         return buffer.getvalue()
 
-        # in the auto mode bias we use automatic bias provided by vowpal wabbit
 
 
-class VWManualFormatter(VWFormatter):
-    """
-    This formatter manually creates quadratic and cubic features for vowpal wabbit
-
-    """
-    def __init__(self, task):
-        self._emitter = FeatureEmitter()
-        raise NotImplementedError
-
-    def __call__(self, *args, **kwargs):
-        pass

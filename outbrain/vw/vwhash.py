@@ -10,7 +10,7 @@ def mmh3str(word, base):
     raise NotImplementedError
 
 
-def truncate_feature(feature, num_bits):
+def truncate_to_num_bits(feature, num_bits):
     return feature & ((1 << num_bits) - 1)
 
 

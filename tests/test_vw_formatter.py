@@ -11,6 +11,7 @@ def task1():
     return {
         "click_field": "click",
         "learn": {
+            "vw": {"hashing_mode": "auto"},
             "namespaces": ["ad_id", "document_id"],
             "quadratic": [],
             "cubic": []
