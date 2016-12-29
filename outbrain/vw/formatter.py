@@ -146,7 +146,7 @@ class VWManualFormatter(VWFormatter):
     """
 
     def __init__(self, task):
-        self._feature_emitter = FeatureEmitter(task)
+        self._feature_emitter = FeatureEmitter(task, ns_join=True)
         self._feature_map_file = task["feature_map"]
 
         print "reading feature map file from %s" % self._feature_map_file
@@ -178,29 +178,32 @@ class VWManualFormatter(VWFormatter):
 
         buffer = StringIO()
         example_features = self._feature_emitter(example)
+        print example_features
         for namespace, ns_features in example_features:
-
             # truncation to num_bits is somewhat excessive here
             # we use it here for clarity (?)
-            features = [str(truncate_to_num_bits(int(self._feature_map[namespace][feature])))
+            features = [str(truncate_to_num_bits(int(self._feature_map[namespace][feature]), self._num_bits))
                         for feature in ns_features
                             if feature in self._feature_map[namespace]
             ]
-            buffer.write("%s " % " ".join(features))
+
+            if features:
+                buffer.write(" %s" % " ".join(features))
 
         return buffer.getvalue()
 
     def __call__(self, examples):
 
-        result = []
+        buffer = StringIO(  )
         for num_example, example in enumerate(examples):
             example_vw_line = self._process_example(example)
-            buffer.write("%s| %s" % (getattr(example, self._click_field), example_vw_line))
+            buffer.write("%s |%s" % (getattr(example, self._click_field), example_vw_line))
+
+            #buffer.write(" %s" % self._feature_map["bias"][""])
 
             if num_example + 1 < len(examples): # write EOL always except for the last example
                 buffer.write("\n")
 
-        # TODO: Write bias to vw_line here!!!
         return buffer.getvalue()
 
 

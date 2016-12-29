@@ -46,7 +46,7 @@ def read_feature_stats(filename):
 
 def compute_feature_stats(csv_file, task, ns_join_sentinel="^"):
 
-    emitter = FeatureEmitter(task)
+    emitter = FeatureEmitter(task, ns_join=True, ns_join_sentinel=ns_join_sentinel)
 
     feature_stats = defaultdict(dict)
     with open(csv_file) as infile:
@@ -54,7 +54,10 @@ def compute_feature_stats(csv_file, task, ns_join_sentinel="^"):
             features_list = emitter(example)
 
             for ns, features in features_list:
+                for fid in features:
+                    feature_stats[ns][fid] = feature_stats[ns].get(fid, 0) + 1
 
+                """
                 if not isinstance(ns, tuple):
                     for fid in features:
                         feature_stats[ns][fid] = feature_stats[ns].get(fid, 0) + 1
@@ -64,6 +67,7 @@ def compute_feature_stats(csv_file, task, ns_join_sentinel="^"):
                         composite_fid = ns_join_sentinel.join(fid)
                         feature_stats[composite_ns][composite_fid] = feature_stats[composite_ns].get(
                             composite_fid, 0) + 1
+                """
 
     return feature_stats
 

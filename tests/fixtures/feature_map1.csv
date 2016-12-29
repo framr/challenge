@@ -1,0 +1,9 @@
+namespace,feature,fid
+ad_id,1,11
+ad_id,3,33
+document_id,1,100
+document_id,2,200
+ad_id^document_id,1^1,100011
+ad_id^document_id,1^2,100012
+ad_id^document_id,3^2,100032
+bias,0,999
