@@ -21,7 +21,6 @@ class FeatureEmitter(object):
         self._manual_bias = task["learn"]["vw"]["manual_bias"]
 
 
-
     def __call__(self, example):
         """
         Args:
