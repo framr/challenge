@@ -1,0 +1,8 @@
+infile: /home/fram/kaggle/outbrain/data/clicks_train.csv
+train: /home/fram/kaggle/outbrain/playground/input/clicks_train_cv_splitby_display_id_split_1_4_train.csv
+test: /home/fram/kaggle/outbrain/playground/input/clicks_train_cv_splitby_display_id_split_1_4_test.csv
+exec: "from hashlib import md5"
+#exec:
+train_expr: "int(md5(example.display_id).hexdigest()[:9], 16) % 4 == 0"
+test_expr: "int(md5(example.display_id).hexdigest()[:9], 16) % 4 != 0"
+
