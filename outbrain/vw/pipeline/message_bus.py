@@ -1,4 +1,4 @@
-from attrdict impoort AttrDict
+from attrdict import AttrDict
 
 DEFAULT_CONFIG = {
     "learn_vw_file": None,
