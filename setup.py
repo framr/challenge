@@ -38,5 +38,7 @@ setup(name='outbrain',
       install_requires=requirements,
       tests_require=test_requirements,
       cmdclass={'test': PyTest},
-      packages=find_packages()
+      packages=find_packages(),
+      scripts=['outbrain/scripts/vw_pipeline_runner.py', 'outbrain/scripts/generate_train_test.py',
+               'outbrain/scripts/csvsort.py', 'outbrain/scripts/merger.py']
 )
