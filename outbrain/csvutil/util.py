@@ -50,6 +50,7 @@ def generate_train_test_by_expression(infilename, train_expr, test_expr,
     """
 
     if exec_expr is not None:
+        print "executing %s" % exec_expr
         exec exec_expr in globals(), locals()
     test_expr_code = compile(test_expr, "<string>", "eval")
     train_expr_code = compile(train_expr, "<string>", "eval")
