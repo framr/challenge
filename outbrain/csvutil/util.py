@@ -52,6 +52,11 @@ def generate_train_test_by_expression(infilename, train_expr, test_expr,
     if exec_expr is not None:
         print "executing %s" % exec_expr
         exec exec_expr in globals(), locals()
+
+    print "output train file: %s" % train_filename
+    print "output test file: %s" % test_filename
+
+
     test_expr_code = compile(test_expr, "<string>", "eval")
     train_expr_code = compile(train_expr, "<string>", "eval")
 
@@ -59,7 +64,6 @@ def generate_train_test_by_expression(infilename, train_expr, test_expr,
     test_examples_count = 0
     with open(test_filename, "w") as outfile_test:
         with open(train_filename, "w") as outfile_train:
-
             with open(infilename) as infile:
 
                 header = infile.readline()
