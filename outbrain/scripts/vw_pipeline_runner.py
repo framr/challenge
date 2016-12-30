@@ -15,9 +15,32 @@ We have two posible pipelines here
 4) compute metrics on train and test
 """
 
+import os
+from argparse import ArgumentParser
+import yaml
 
-from outbrain.vw.action import *
+
+from outbrain.vw.pipeline.processor import run_pipeline, DEFAULT_VW_PIPELINE
 
 
-def run_pipeline(task):
-    pass
+if __name__ == "__main__":
+
+    argparser = ArgumentParser()
+    argparser.add_argument("--task", dest="task", default=None, type=str, required=True,
+                           help="yaml file with task config")
+    argparser.add_argument("--outdir", dest="outdir", default="./", type=str,
+                       help="output directory for vw models")
+
+    args = argparser.parse_args()
+
+    task = yaml.load(open.read(args.task))
+
+    print "Processing task %s" % task["task_id"]
+    work_dir = os.path.join(args.outdir, task["task_id"])
+
+    print "Setting working directory to %s" % work_dir
+    os.chdir(work_dir)
+
+    print "Processing pipeline"
+    run_pipeline(DEFAULT_VW_PIPELINE, task)
+

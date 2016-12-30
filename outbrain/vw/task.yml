@@ -16,6 +16,7 @@ learn:
   learn_file:
 
   vw:
+    binary: vw
     num_bits: 25
     loss: logistic
     passes: 300
@@ -25,6 +26,7 @@ learn:
     manual_bias: false
     learn_options: "--holdout_off --termination 0.0"
     hashing_mode: auto
+
 
   crr:
     group_key: display_id
