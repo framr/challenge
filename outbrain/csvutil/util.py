@@ -30,7 +30,7 @@ def get_column_indices_from_header(columns, header):
 
 
 def generate_train_test_by_expression(infilename, train_expr, test_expr,
-                                      train_filename, test_filename, separator=","):
+                                      train_filename, test_filename, separator=",", exec_expr=None):
     """
     Split file by train and test evaluating user expression returning True or False
     Example of expressions
@@ -49,6 +49,8 @@ def generate_train_test_by_expression(infilename, train_expr, test_expr,
     Returns:
     """
 
+    if exec_expr is not None:
+        exec exec_expr in globals(), locals()
     test_expr_code = compile(test_expr, "<string>", "eval")
     train_expr_code = compile(train_expr, "<string>", "eval")
 
