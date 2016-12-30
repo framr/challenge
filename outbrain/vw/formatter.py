@@ -48,12 +48,13 @@ from .vwhash import truncate_to_num_bits
 
 def get_vw_formatter(task):
     if task['learn']['vw']['hashing_mode'] == 'auto':
+        print "Using vowpal wabbit auto formatter"
         formatter = VWAutoFormatter(task)
     elif task['learn']['vw']['hashing_mode'] == 'manual':
+        print "Using vowpal wabbit manual formatter"
         formatter = VWManualFormatter(task)
     else:
         raise NotImplementedError
-
     return formatter
 
 
@@ -103,6 +104,7 @@ class VWAutoFormatter(VWFormatter):
         self._feature_stats_filename = task.get("feature_stats", None)
         self._feature_stats = None
         if self._min_shows > 1:
+            print "min_shows > 1, reading feature_stats file to be used for filtration"
             self._feature_stats = read_feature_stats(self._feature_stats_filename)
 
         if task["learn"]["vw"].get("manual_bias", False):
@@ -242,27 +244,8 @@ class VWCRRManualFormatter(object):
         # Create vw lines for
         """
 
-        buffer = StringIO()
-        for num_example, example in enumerate(examples):
-            #print getattr(example, self._click_field)
-            buffer.write("%s " % getattr(example, self._click_field))
-            for ns in self._namespaces:
-                features = getattr(example, ns)
+        # Use manual formatter as a stub
 
-                print "|%s|%s|" % (ns, features)
-
-                if self._min_shows > 1:
-                    # optionally filter features with low statistics
-                    features = [f for f in features
-                                if self._feature_stats[ns].get(f, 0) >= self._min_shows]
-                    buffer.write("|%s %s" % (ns, features))
-                else:
-                    buffer.write("|%s %s" % (ns, features))
-
-            if num_example + 1 < len(examples):
-                buffer.write("\n")
-
-        return buffer.getvalue()
-
+        pass
 
 

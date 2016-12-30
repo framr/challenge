@@ -5,6 +5,9 @@ from ..csvutil.reader import csv_file_iter
 from .feature import FeatureEmitter
 
 
+__all__ = ["read_feature_map", "compute_feature_stats", "compute_feature_map_by_enumeration",
+           "compute_feature_map_by_hashing", "create_feature_stats_file"]
+
 def read_feature_map(filename):
     """
     feature_map format:
@@ -22,6 +25,15 @@ def read_feature_map(filename):
 
 def filter_feature_map(filename):
     raise NotImplementedError
+
+
+def compute_feature_map_by_enumeration(csv_file, task, feature_stats=None, min_shows=None):
+    pass
+
+
+def compute_feature_map_by_hashing(csv_file, task,
+    feature_stats=None, min_shows=None):
+    pass
 
 
 def read_feature_stats(filename):
@@ -82,6 +94,4 @@ def create_feature_stats_file(csv_file, task, outfile, ns_join_sentinel="^"):
                 outfile.write("%s,%s,%s\n" % (ns, feature, shows))
 
 
-def create_feature_map(csv_file, task):
-    raise NotImplementedError
 

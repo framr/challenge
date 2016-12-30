@@ -2,6 +2,15 @@ from subprocess import Popen, check_call
 from logging import Logger
 
 
+class BasicLearner(object):
+    pass
+
+class VWLearner(BasicLearner):
+    def __init__(self):
+        pass
+
+
+
 
 def get_vw_launch_args(task):
 
@@ -30,9 +39,7 @@ def get_vw_launch_args(task):
     if vw_opts["hashing_mode"] == "manual":
         args.extend(["--hash", "strings"])
 
-
     return " ".join(map(str, args))
-
 
 
 def learn_vw(learn_file, task):
@@ -49,14 +56,6 @@ def learn_vw(learn_file, task):
         logger.info("vowpal wabbit learned successfully")
     else:
         raise Exception("Learning vw error, return code = %s" % return_code)
-
-
-
-
-
-
-
-
 
 
 
