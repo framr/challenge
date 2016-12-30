@@ -49,9 +49,9 @@ def generate_train_test_by_expression(infilename, train_expr, test_expr,
     Returns:
     """
 
-    if exec_expr is not None:
-        print "executing %s" % exec_expr
-        exec exec_expr in globals(), locals()
+    #if exec_expr is not None:
+    #    print "executing %s" % exec_expr
+    #    exec exec_expr in globals(), locals()
 
     print "output train file: %s" % train_filename
     print "output test file: %s" % test_filename
