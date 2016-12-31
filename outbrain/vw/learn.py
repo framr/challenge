@@ -47,7 +47,7 @@ def get_vw_launch_args(task):
 
 def learn_vw(learn_file, task):
 
-    logger = Logger()
+    #logger = Logger()
     args = get_vw_launch_args(task)
     with open(learn_file) as infile:
         with open('./vw.stderr', 'vw') as stderr_file:
@@ -56,7 +56,8 @@ def learn_vw(learn_file, task):
                                          shell=True)
 
     if return_code == 0:
-        logger.info("vowpal wabbit learned successfully")
+        print "vw learned successfully"
+        #logger.info("vowpal wabbit learned successfully")
     else:
         raise Exception("Learning vw error, return code = %s" % return_code)
 
