@@ -16,9 +16,11 @@ def export(func):
 @export
 def action__compute_feature_stats(task, mbus):
 
-    infile = task["learn"]["learn_file"]
-    mbus.feature_stats == os.path.join(os.getcwd(), "feature_stats.csv")
-    create_feature_stats_file(infile, task, mbus.feature_stats)
+    mbus.feature_stats = None
+    if task["min_shows"] > 1 or task["create_feature_stats"]:
+        infile = task["learn"]["learn_file"]
+        mbus.feature_stats == os.path.join(os.getcwd(), "feature_stats.csv")
+        create_feature_stats_file(infile, task, mbus.feature_stats)
 
 
 @export

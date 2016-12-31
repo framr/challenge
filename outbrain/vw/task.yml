@@ -3,8 +3,8 @@ click_field: click
 weight_field:
 min_shows: 5
 
-feature_map:
-feature_stats:
+create_feature_map: false
+create_feature_stats: true
 
 learn:
   namespaces:
