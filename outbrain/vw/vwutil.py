@@ -91,7 +91,7 @@ def create_feature_stats_file(csv_file, task, outfile, ns_join_sentinel="^"):
         out.write("namespace,feature,shows\n")
         for ns, ns_stats in stats.iteritems():
             for feature, shows in ns_stats.iteritems():
-                outfile.write("%s,%s,%s\n" % (ns, feature, shows))
+                out.write("%s,%s,%s\n" % (ns, feature, shows))
 
 
 
