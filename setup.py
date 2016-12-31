@@ -34,7 +34,7 @@ class PyTest(TestCommand):
 setup(name='outbrain',
       version='0.0.1',
       author='fram',
-      author_email='pavel.sht@yandex.ru',
+      author_email='pavel.sht(gav-gav-gav)yandex.ru',
       install_requires=requirements,
       tests_require=test_requirements,
       cmdclass={'test': PyTest},
