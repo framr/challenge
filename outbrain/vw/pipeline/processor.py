@@ -9,7 +9,8 @@ DEFAULT_VW_PIPELINE = [
     action__compute_feature_map,
     action__prepare_log_for_vw,
     action__learn_vw,
-    action__apply_vw
+    action__apply_vw,
+    action__save_message_bus
 ]
 
 

@@ -1,4 +1,5 @@
 import os
+import yaml
 
 from outbrain.vw.vwutil import *
 from outbrain.vw.formatter import convert_csv2vw
@@ -79,8 +80,14 @@ def action__apply_vw(task, mbus):
 
 @export
 def action__compute_metrics(task, mbus):
-
     pass
+
+
+@export
+def action__save_message_bus(task, mbus):
+    with open("message_bus.yml", "w") as outfile:
+        outfile.write(yaml.dump(mbus))
+
 
 
 
