@@ -37,6 +37,9 @@ if __name__ == "__main__":
 
     print "Processing task %s" % task["task_id"]
     work_dir = os.path.join(args.outdir, task["task_id"])
+    if not os.path.exists(work_dir):
+        os.makedirs(work_dir)
+
 
     print "Setting working directory to %s" % work_dir
     os.chdir(work_dir)
