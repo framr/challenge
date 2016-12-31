@@ -33,7 +33,7 @@ if __name__ == "__main__":
 
     args = argparser.parse_args()
 
-    task = yaml.load(open.read(args.task))
+    task = yaml.load(open(args.task).read())
 
     print "Processing task %s" % task["task_id"]
     work_dir = os.path.join(args.outdir, task["task_id"])
