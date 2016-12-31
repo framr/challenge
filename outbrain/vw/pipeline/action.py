@@ -19,7 +19,7 @@ def action__compute_feature_stats(task, mbus):
     mbus.feature_stats = None
     if task["min_shows"] > 1 or task["create_feature_stats"]:
         infile = task["learn"]["learn_file"]
-        mbus.feature_stats == os.path.join(os.getcwd(), "feature_stats.csv")
+        mbus.feature_stats = os.path.join(os.getcwd(), "feature_stats.csv")
         create_feature_stats_file(infile, task, mbus.feature_stats)
 
 
@@ -44,7 +44,7 @@ def action__prepare_log_for_vw(task, mbus):
     mbus.learn_vw_file = None
     if task.get("test", {}).get("test_file", None) is not None:
         infile = task["test"]["test_file"]
-        mbus.test_vw_file == os.path.join(os.getcwd(), "test_vw.txt")
+        mbus.test_vw_file = os.path.join(os.getcwd(), "test_vw.txt")
         convert_csv2vw(infile, mbus.learn_vw_file, task)
 
 
