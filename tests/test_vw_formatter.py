@@ -1,8 +1,9 @@
 import pytest
-
+import yaml
 
 from outbrain.csvutil.reader import make_example_cls
 from outbrain.vw.formatter import VWAutoFormatter, VWManualFormatter
+
 
 
 @pytest.fixture()
@@ -85,7 +86,6 @@ def examples_and_vw_lines_for_manualformatter_task1_feature_map1():
     return result
 
 
-
 def test_vw_auto_formatter1(examples_vw_lines_task_fixture_for_autoformatter):
 
     data, task = examples_vw_lines_task_fixture_for_autoformatter
@@ -96,9 +96,9 @@ def test_vw_auto_formatter1(examples_vw_lines_task_fixture_for_autoformatter):
         assert result == vw_line
 
 
-def test_vw_manual_formatter1(task1, examples_and_vw_lines_for_manualformatter_task1_feature_map1):
+def test_vw_manual_formatter1(task1, examples_and_vw_lines_for_manualformatter_task1_feature_map1, feature_map1):
 
-    formatter = VWManualFormatter(task1)
+    formatter = VWManualFormatter(task1, feature_map_file=task1["feature_map"])
     for example, vw_line in examples_and_vw_lines_for_manualformatter_task1_feature_map1:
         result = formatter([example])
         assert result == vw_line

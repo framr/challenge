@@ -1,4 +1,4 @@
-
+import time
 
 from outbrain.vw.pipeline.action import *
 from outbrain.vw.pipeline.message_bus import get_message_bus
@@ -19,5 +19,9 @@ def run_pipeline(pipeline, task):
     for action in pipeline:
 
         print "Processing action %s" % action.__name__
+        prev_time = time.clock()
         action(task, mbus)
+        elapsed_time = time.clock() - prev_time
 
+        print "executing %s action took %s seconds (%s hours)" % (
+            action.__name__, elapsed_time, elapsed_time / 3600.0)

@@ -46,21 +46,26 @@ from .vwutil import read_feature_stats, read_feature_map
 from .vwhash import truncate_to_num_bits
 
 
-def get_vw_formatter(task):
+def get_vw_formatter(task, feature_stats_file=None, feature_map_file=None):
     if task['learn']['vw']['hashing_mode'] == 'auto':
         print "Using vowpal wabbit auto formatter"
-        formatter = VWAutoFormatter(task)
+        formatter = VWAutoFormatter(task, feature_stats_file=feature_stats_file,
+                                    feature_map_file=feature_map_file)
     elif task['learn']['vw']['hashing_mode'] == 'manual':
         print "Using vowpal wabbit manual formatter"
-        formatter = VWManualFormatter(task)
+        formatter = VWManualFormatter(task, feature_stats_file=feature_stats_file,
+                                      feature_map_file=feature_map_file)
     else:
         raise NotImplementedError
     return formatter
 
 
-def convert_csv2vw(infile_name, outfile_name, task, batch_size=10):
+def convert_csv2vw(infile_name, outfile_name, task,
+                   feature_stats_file=None, feature_map_file=None, batch_size=10):
 
-    formatter = get_vw_formatter(task)
+    formatter = get_vw_formatter(task, feature_stats_file=feature_stats_file,
+                                 feature_map_file=feature_map_file)
+
     with open(infile_name) as infile:
         with open(outfile_name, 'w') as outfile:
 
@@ -93,7 +98,7 @@ class VWAutoFormatter(VWFormatter):
     cubic features and bias is done by vw.
     """
 
-    def __init__(self, task):
+    def __init__(self, task, feature_stats_file=None, feature_map_file=None):
         self._task = task
         self._click_field = task["click_field"]
         self._namespaces = task["learn"]["namespaces"]
@@ -101,7 +106,7 @@ class VWAutoFormatter(VWFormatter):
         self._cubic = task["learn"]["cubic"]
 
         self._min_shows = task.get('min_shows', 1)
-        self._feature_stats_filename = task.get("feature_stats", None)
+        self._feature_stats_filename = feature_stats_file
         self._feature_stats = None
         if self._min_shows > 1:
             print "min_shows > 1, reading feature_stats file to be used for filtration"
@@ -147,9 +152,9 @@ class VWManualFormatter(VWFormatter):
     here we accept feature if it is present in feature map, otherwise it is rejected
     """
 
-    def __init__(self, task):
+    def __init__(self, task, feature_stats_file=None, feature_map_file=None):
         self._feature_emitter = FeatureEmitter(task, ns_join=True)
-        self._feature_map_file = task["feature_map"]
+        self._feature_map_file = feature_map_file
 
         print "reading feature map file from %s" % self._feature_map_file
         self._feature_map = read_feature_map(self._feature_map_file)

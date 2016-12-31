@@ -3,6 +3,8 @@ from attrdict import AttrDict
 DEFAULT_CONFIG = {
     "learn_vw_file": None,
     "test_vw_file": None,
+    "feature_stats": None,
+    "feature_map": None,
     "vw": {
         "model": None,
         "readable_model": None,

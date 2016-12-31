@@ -22,7 +22,7 @@ def action__compute_feature_stats(task, mbus):
 
 @export
 def action__compute_feature_map(task, mbus):
-    pass
+    mbus.feature_map = None
 
 
 @export
@@ -30,7 +30,13 @@ def action__prepare_log_for_vw(task, mbus):
 
     infile = task["learn"]["learn_file"]
     mbus.learn_vw_file = os.path.join(os.getcwd(), "learn_vw.txt")
-    convert_csv2vw(infile, mbus.learn_vw_file, task)
+
+    convert_csv2vw(infile,
+                   mbus.learn_vw_file,
+                   task,
+                   feature_stats_file=mbus.feature_stats,
+                   feature_map_file=mbus.feature_map
+    )
 
     mbus.learn_vw_file = None
     if task.get("test", {}).get("test_file", None) is not None:
