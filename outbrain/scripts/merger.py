@@ -7,6 +7,20 @@ from tempfile import NamedTemporaryFile
 
 import csv
 
+CLICKED_FIELD = "clicked"
+
+def columns_to_add_to_test(filename, separator=","):
+    header = None
+    with open(filename) as infile:
+        header = infile.readline().strip().split(separator)
+
+    add_fields = None
+    if CLICKED_FIELD in header:
+        add_fields = [["is_train", 0]]
+    else:
+        add_fields = [[CLICKED_FIELD, 0], ["is_train", 0]]
+
+    return add_fields
 
 def add_columns_and_strip_header(infilename, outfilename, add_columns=None, separator=","):
     """
@@ -70,8 +84,10 @@ if __name__ == '__main__':
                 args.train, train.name, add_columns=[["is_train", "1"]],
                 separator=args.separator
             )
+
+            add_columns_for_test = columns_to_add_to_test(args.test)
             test_header = add_columns_and_strip_header(
-                args.test, test.name, add_columns=[["clicked", "0"], ["is_train", "0"]],
+                args.test, test.name, add_columns=add_columns_for_test,
                 separator=args.separator
             )
 
