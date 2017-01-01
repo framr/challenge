@@ -64,6 +64,8 @@ def action__learn_vw(task, mbus, use_cache=False):
 
     print "Entering learn_vw action"
     learn_file = mbus.learn_vw_file
+    print "Input learn file: %s" % learn_file
+
     learn_vw(learn_file, task)
     print "learning vw action finished"
 
