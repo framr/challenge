@@ -41,7 +41,7 @@ def action__prepare_log_for_vw(task, mbus):
                    feature_map_file=mbus.feature_map
     )
 
-    mbus.learn_vw_file = None
+    mbus.test_vw_file = None
     if task.get("test", {}).get("test_file", None) is not None:
         infile = task["test"]["test_file"]
         mbus.test_vw_file = os.path.join(os.getcwd(), "test_vw.txt")
