@@ -24,7 +24,6 @@ def action__compute_feature_stats(task, mbus, use_cache=False):
     if use_cache and os.path.isfile(mbus.feature_stats):
         print "ouput feature stats already exists, using it from cache %s" % mbus.feature_stats
     else:
-
         infile = task["learn"]["learn_file"]
         create_feature_stats_file(infile, task, mbus.feature_stats)
 
@@ -39,11 +38,11 @@ def action__prepare_log_for_vw(task, mbus, use_cache=False):
     infile = task["learn"]["learn_file"]
 
     outfile = os.path.join(os.getcwd(), "learn_vw.txt")
+    mbus.learn_vw_file = outfile
+
     if use_cache and os.path.isfile(outfile):
         print "learn outfile already exists, skipping operation and using cache"
     else:
-
-        mbus.learn_vw_file = outfile
         convert_csv2vw(infile,
                        mbus.learn_vw_file,
                        task,
@@ -56,12 +55,12 @@ def action__prepare_log_for_vw(task, mbus, use_cache=False):
     if task.get("test", {}).get("test_file", None) is not None:
 
         infile = task["test"]["test_file"]
-
         outfile = os.path.join(os.getcwd(), "test_vw.txt")
+        mbus.test_vw_file = outfile
+
         if use_cache and os.path.isfile(outfile):
             print "test outfile already exists, skipping operation and using cache"
         else:
-            mbus.test_vw_file = outfile
             convert_csv2vw(infile, mbus.learn_vw_file, task)
 
 

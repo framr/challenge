@@ -1,4 +1,6 @@
+import os
 from attrdict import AttrDict
+
 
 DEFAULT_CONFIG = {
     "learn_vw_file": None,
@@ -17,6 +19,7 @@ DEFAULT_CONFIG = {
 }
 
 
-def get_message_bus():
-
+def get_message_bus(path=None):
+    if not path:
+        path = os.getcwd()
     return AttrDict(DEFAULT_CONFIG)
