@@ -50,8 +50,8 @@ def learn_vw(learn_file, task):
     #logger = Logger()
     args = get_vw_launch_args(task)
     with open(learn_file) as infile:
-        with open('./vw.stderr', 'vw') as stderr_file:
-            with open('./vw.stdout', 'vw') as stdout_file:
+        with open('./vw.stderr', 'w') as stderr_file:
+            with open('./vw.stdout', 'w') as stdout_file:
                 return_code = check_call(args, stdin=infile, stderr=stderr_file, stdout=stdout_file,
                                          shell=True)
 
