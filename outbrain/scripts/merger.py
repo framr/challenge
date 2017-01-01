@@ -38,7 +38,7 @@ def add_columns_and_strip_header(infilename, outfilename, add_columns=None, sepa
             writer = csv.writer(outfile)
             for row in csv.reader(infile):
                 writer.writerow(row + column_values)
-                print row + column_values
+                #print row + column_values
 
     return header
 
