@@ -30,6 +30,8 @@ if __name__ == "__main__":
                            help="yaml file with task config")
     argparser.add_argument("--outdir", dest="outdir", default="./", type=str,
                        help="output directory for vw models")
+    argparser.add_argument("--cache", dest="use_cache", action="store_true",
+                           help="use cached files if available")
 
     args = argparser.parse_args()
 
@@ -45,5 +47,5 @@ if __name__ == "__main__":
     os.chdir(work_dir)
 
     print "Processing pipeline"
-    run_pipeline(DEFAULT_VW_PIPELINE, task)
+    run_pipeline(DEFAULT_VW_PIPELINE, task, use_cache=args.use_cache)
 

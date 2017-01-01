@@ -14,14 +14,14 @@ DEFAULT_VW_PIPELINE = [
 ]
 
 
-def run_pipeline(pipeline, task):
+def run_pipeline(pipeline, task, use_cache=False):
 
     mbus = get_message_bus()
     for action in pipeline:
 
         print "Processing action %s" % action.__name__
         prev_time = time.clock()
-        action(task, mbus)
+        action(task, mbus, use_cache=use_cache)
         elapsed_time = time.clock() - prev_time
 
         print "executing %s action took %s seconds (%s hours)" % (
