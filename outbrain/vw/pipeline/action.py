@@ -17,9 +17,15 @@ def export(func):
 def action__compute_feature_stats(task, mbus, use_cache=False):
 
     mbus.feature_stats = None
-    if task["min_shows"] > 1 or task["create_feature_stats"]:
+    if task.get("min_shows", 0) <= 1 and not task["create_feature_stats"]:
+        return
+
+    mbus.feature_stats = os.path.join(os.getcwd(), "feature_stats.csv")
+    if use_cache and os.path.isfile(mbus.feature_stats):
+        print "ouput feature stats already exists, using it from cache %s" % mbus.feature_stats
+    else:
+
         infile = task["learn"]["learn_file"]
-        mbus.feature_stats = os.path.join(os.getcwd(), "feature_stats.csv")
         create_feature_stats_file(infile, task, mbus.feature_stats)
 
 
