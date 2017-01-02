@@ -91,6 +91,25 @@ class VWFormatter(object):
         pass
 
 
+def normalize_label(label, loss):
+    """
+    for binary classification vowpal wabbit expects labels to be in set {-1, 1}
+    Args:
+        label:
+        loss:
+    Returns:
+
+    """
+
+    if loss != "logistic":
+        return label
+
+    normalized_label = int(label)
+    if normalized_label < 1:
+        normalized_label = -1
+    return normalized_label
+
+
 class VWAutoFormatter(VWFormatter):
     """
     Class formatting input for vowpal wabbit.
@@ -104,6 +123,7 @@ class VWAutoFormatter(VWFormatter):
         self._namespaces = task["learn"]["namespaces"]
         self._quadratic = task["learn"]["quadratic"]
         self._cubic = task["learn"]["cubic"]
+        self._loss = task["learn"]["vw"]["loss"]
 
         self._min_shows = task.get('min_shows', 1)
         self._feature_stats_filename = feature_stats_file
@@ -117,13 +137,13 @@ class VWAutoFormatter(VWFormatter):
 
         self._feature_separator = task.get("log_config", {}).get("feature_separator", None)
 
-
     def __call__(self, examples):
 
         buffer = StringIO()
         for num_example, example in enumerate(examples):
             #print getattr(example, self._click_field)
-            buffer.write("%s " % getattr(example, self._click_field))
+            class_label = normalize_label(getattr(example, self._click_field), self._loss)
+            buffer.write("%s " % class_label)
             for ns in self._namespaces:
                 features = getattr(example, ns).strip().split(self._feature_separator)
 
@@ -162,6 +182,7 @@ class VWManualFormatter(VWFormatter):
         self._task = task
         self._click_field = task["click_field"]
 
+        self._loss = task["learn"]["vw"]["loss"]
         self._num_bits = task["learn"]["vw"]["num_bits"]
         #self._namespaces = task["learn"]["namespaces"]
         #self._quadratic = task["learn"]["quadratic"]
@@ -204,7 +225,9 @@ class VWManualFormatter(VWFormatter):
         buffer = StringIO(  )
         for num_example, example in enumerate(examples):
             example_vw_line = self._process_example(example)
-            buffer.write("%s |%s" % (getattr(example, self._click_field), example_vw_line))
+
+            class_label = normalize_label(getattr(example, self._click_field), self._loss)
+            buffer.write("%s |%s" % (class_label, example_vw_line))
 
             #buffer.write(" %s" % self._feature_map["bias"][""])
 
