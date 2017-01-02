@@ -18,7 +18,7 @@ def get_vw_launch_args(task):
 
     args = [vw_opts["binary"]]
     args.extend(["--cache_file", "./vw_cache"])
-    args.extend(["--f", "./model"])
+    args.extend(["-f", "./model"])
     args.extend(["--readable_model", "./rmodel"])
     args.extend(["--invert_hash", "./rmodel_inverted_hash"])
 
