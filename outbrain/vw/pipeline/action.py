@@ -89,7 +89,7 @@ def action__apply_vw(task, mbus, use_cache=False):
     predictor = VWAutoPredictor(model_path)
 
     mbus.predict.learn = os.path.join(os.getcwd(), "learn_vw.predicted.txt")
-    predictor.apply(mbus.learn_vw_file, mbus.predict.learn, task)
+    predictor.apply(mbus.learn_vw_file, mbus.predict.learn)
 
 
     if mbus.test_vw_file is not None:

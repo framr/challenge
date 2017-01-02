@@ -7,6 +7,8 @@ DEFAULT_CONFIG = {
     "test_vw_file": None,
     "feature_stats": None,
     "feature_map": None,
+    "learn": None,
+    "test": None,
     "vw": {
         "model": None,
         "readable_model": None,

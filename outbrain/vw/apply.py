@@ -14,8 +14,10 @@ class VWPredictor(object):
 
 class VWAutoPredictor(VWPredictor):
 
-    def __init__(self, model_path):
+    def __init__(self, model_path, task=None, mbus=None):
         self._model_path = model_path
+        self._task = None
+        self._mbus = None
 
     def apply(self, learn_log, output_log):
 
@@ -23,7 +25,7 @@ class VWAutoPredictor(VWPredictor):
 
         vw_args = ["vw", "-t"]
         vw_args.extend(["-i", learn_log])
-        vw_args.extend(["-p", ])
+        vw_args.extend(["-p", self._model_path])
         vw_cmd = " ".join(map(str, vw_args))
 
         logger.info("vowpal wabbit launch command")
