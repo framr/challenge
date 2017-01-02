@@ -77,6 +77,7 @@ def convert_csv2vw(infile_name, outfile_name, task,
                 else:
                     vw_formatted_lines = formatter(examples_batch)
                     outfile.write(vw_formatted_lines)
+                    examples_batch = []
 
             if examples_batch:
                 vw_formatted_lines = formatter(examples_batch)
@@ -155,8 +156,8 @@ class VWAutoFormatter(VWFormatter):
                 else:
                     buffer.write("|%s %s" % (ns, " ".join(features)))
 
-            if num_example + 1 < len(examples):
-                buffer.write("\n")
+            #if num_example + 1 < len(examples):
+            buffer.write("\n")
 
         # in the auto mode bias we use automatic bias provided by vowpal wabbit
         return buffer.getvalue()
