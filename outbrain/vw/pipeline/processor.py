@@ -14,8 +14,6 @@ DEFAULT_VW_PIPELINE = [
 ]
 
 
-
-
 def run_pipeline(pipeline, task, use_cache=False):
 
     mbus = get_message_bus()

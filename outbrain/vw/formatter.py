@@ -66,12 +66,14 @@ def convert_csv2vw(infile_name, outfile_name, task,
     formatter = get_vw_formatter(task, feature_stats_file=feature_stats_file,
                                  feature_map_file=feature_map_file)
 
+    num_rows = 0
     with open(infile_name) as infile:
         with open(outfile_name, 'w') as outfile:
 
             examples_batch = []
             for example in csv_file_iter(infile):
 
+                num_rows += 1
                 if len(examples_batch) < batch_size:
                     examples_batch.append(example)
                 else:
@@ -83,6 +85,7 @@ def convert_csv2vw(infile_name, outfile_name, task,
                 vw_formatted_lines = formatter(examples_batch)
                 outfile.write(vw_formatted_lines)
 
+            print "file %s converted into %s, %d rows read" % (infile_name, outfile_name, num_rows)
 
 
 class VWFormatter(object):
@@ -231,9 +234,8 @@ class VWManualFormatter(VWFormatter):
             buffer.write("%s |%s" % (class_label, example_vw_line))
 
             #buffer.write(" %s" % self._feature_map["bias"][""])
-
-            if num_example + 1 < len(examples): # write EOL always except for the last example
-                buffer.write("\n")
+            #if num_example + 1 < len(examples): # write EOL always except for the last example
+            buffer.write("\n")
 
         return buffer.getvalue()
 
