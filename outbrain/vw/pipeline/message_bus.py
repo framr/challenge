@@ -14,10 +14,8 @@ DEFAULT_CONFIG = {
         "readable_model": None
 #        "readable_model_inverted": None
     },
-    "predict": {
-        "learn": None,
-        "test": None
-    }
+    "predicted_learn": None,
+    "predicted_test": None
 }
 
 
