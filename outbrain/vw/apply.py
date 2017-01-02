@@ -23,9 +23,9 @@ class VWAutoPredictor(VWPredictor):
 
         #logger = Logger()
 
-        vw_args = ["vw", "-t"]
-        vw_args.extend(["-i", learn_log])
-        vw_args.extend(["-p", self._model_path])
+        vw_args = ["vw", learn_log, "-t"]
+        vw_args.extend(["-i", self._model_path])
+        vw_args.extend(["-p", output_log])
         vw_cmd = " ".join(map(str, vw_args))
 
         print "vowpal wabbit launch command %s" % vw_cmd
