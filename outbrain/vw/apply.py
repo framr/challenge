@@ -21,14 +21,14 @@ class VWAutoPredictor(VWPredictor):
 
     def apply(self, learn_log, output_log):
 
-        logger = Logger()
+        #logger = Logger()
 
         vw_args = ["vw", "-t"]
         vw_args.extend(["-i", learn_log])
         vw_args.extend(["-p", self._model_path])
         vw_cmd = " ".join(map(str, vw_args))
 
-        logger.info("vowpal wabbit launch command")
+        print "vowpal wabbit launch command %s" % vw_cmd
 
         with open("vw_predict.stderr", "w") as stderr_file:
             with open("vw_predict.stdout", "w") as stdout_file:
@@ -36,7 +36,7 @@ class VWAutoPredictor(VWPredictor):
                                          shell=True)
 
         if return_code == 0:
-            logger.info("vowpal wabbit predictions successfully finished")
+            print "vowpal wabbit predictions successfully finished"
         else:
             raise Exception("vowpal wabbit predictions failed, return code = %s" % return_code)
 
