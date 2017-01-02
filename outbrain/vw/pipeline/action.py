@@ -79,17 +79,22 @@ def action__learn_vw(task, mbus, use_cache=False):
     print "Input learn file: %s" % learn_file
 
     cur_dir = os.getcwd()
-    mbus.vw.model = os.path.join(cur_dir, "model")
-    mbus.vw.readable_model = os.path.join(cur_dir, "readable_model")
-    mbus.vw.readable_model_inverted = os.path.join(cur_dir, "readable_model_inverted")
+
+    mbus.vw = {
+        "model": os.path.join(cur_dir, "model"),
+        "readable_model" : os.path.join(cur_dir, "readable_model")
+    }
+
+    #mbus.vw.model = os.path.join(cur_dir, "model")
+    #mbus.vw.readable_model = os.path.join(cur_dir, "readable_model")
+    #mbus.vw.readable_model_inverted = os.path.join(cur_dir, "readable_model_inverted")
 
     if use_cache and os.path.isfile(mbus.vw.model):
         print "found cached vw model in cache enabled mode, skipping learning vowpal wabbit"
     else:
         learn_vw(learn_file, task)
         print "learning vw action finished"
-        print "vw models saved in %s, %s and %s files" % (mbus.vw.model, mbus.vw.readable_model,
-            mbus.vw.readable_model_inverted)
+        print "vw models saved in %s and %s files" % (mbus.vw.model, mbus.vw.readable_model)
 
 
 @export

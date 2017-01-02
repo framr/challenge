@@ -11,8 +11,8 @@ DEFAULT_CONFIG = {
     "test": None,
     "vw": {
         "model": None,
-        "readable_model": None,
-        "readable_model_inverted": None
+        "readable_model": None
+#        "readable_model_inverted": None
     },
     "predict": {
         "learn": None,
