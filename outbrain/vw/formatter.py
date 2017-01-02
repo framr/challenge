@@ -79,7 +79,7 @@ def convert_csv2vw(infile_name, outfile_name, task,
                 else:
                     vw_formatted_lines = formatter(examples_batch)
                     outfile.write(vw_formatted_lines)
-                    examples_batch = []
+                    examples_batch = [example]
 
             if examples_batch:
                 vw_formatted_lines = formatter(examples_batch)
