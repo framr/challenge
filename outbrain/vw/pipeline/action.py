@@ -40,6 +40,7 @@ def action__prepare_log_for_vw(task, mbus, use_cache=False):
     outfile = os.path.join(os.getcwd(), "learn_vw.txt")
     mbus.learn_vw_file = outfile
 
+    print "converting learn file %s into vw format" % infile
     if use_cache and os.path.isfile(outfile):
         print "learn outfile already exists, skipping operation and using cache"
     else:
@@ -54,6 +55,8 @@ def action__prepare_log_for_vw(task, mbus, use_cache=False):
     if task.get("test", {}).get("test_file", None) is not None:
 
         infile = task["test"]["test_file"]
+        print "converting test file %s into vw format" % infile
+
         outfile = os.path.join(os.getcwd(), "test_vw.txt")
         mbus.test_vw_file = outfile
 
