@@ -106,6 +106,8 @@ def action__apply_vw(task, mbus, use_cache=False):
     mbus.predicted_learn = os.path.join(os.getcwd(), "learn_vw.predicted.txt")
     predictor.apply(mbus.learn_vw_file, mbus.predicted_learn)
 
+    # TODO: merge predictions file with original file
+
 
     if mbus.test_vw_file is not None:
         mbus.predicted_test = os.path.join(os.getcwd(), "test_vw.predicted.txt")

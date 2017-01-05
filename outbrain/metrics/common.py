@@ -1,6 +1,7 @@
 from ..csvutil.reader import csv_file_iter, csv_file_group_iter
 from .evaluator import *
 
+
 class MetricsGroupAggregator(object):
 
     def __init__(self, evaluators=[],
@@ -25,8 +26,6 @@ class MetricsGroupAggregator(object):
                     metrics[evaluator.NAME] += evaluator(examples_batch)
 
         return metrics
-
-
 
 
 def compute_metrics(infilename, config):

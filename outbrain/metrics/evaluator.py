@@ -73,7 +73,7 @@ class MAPEvaluator(MetricEvaluator):
         for i, example in enumerate(sorted_examples):
             label = int(getattr(example, self._class_field))
             cumulative_clicks += label
-            pred = float(getattr(example, self._predictions_field))
+            #pred = float(getattr(example, self._predictions_field))
 
             if label == 1:
                 result += float(cumulative_clicks) / (i + 1)

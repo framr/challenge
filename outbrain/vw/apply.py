@@ -1,6 +1,6 @@
 from logging import Logger
 from subprocess import check_call
-
+from math import exp
 
 class VWPredictor(object):
     def __init__(self, model_path):
@@ -49,6 +49,26 @@ class VWAutoPredictor(VWPredictor):
 class VWManualPredictor(VWPredictor):
     def __init__(self, model_path):
         raise NotImplementedError
+
+
+
+def merge_predictions(original_file, pred_file, result_file, target="vw",
+                      apply_sigmoid=True):
+
+    with open(result_file, "w") as result:
+        with open(original_file) as original:
+            with open(pred_file)as predictions:
+                header = original.readline().strip()
+                new_header = "%s,%\n" % (header, target)
+                result.write(new_header)
+
+                for line in original:
+                    prediction = predictions.readline().strip()
+
+                    result.write("%s,%s" % (line.strip(), prediction))
+                    if apply_sigmoid:
+                        result.write(",%s" % 1.0 / (1.0 + exp(-float(prediction))))
+                    result.write("\n")
 
 
 
