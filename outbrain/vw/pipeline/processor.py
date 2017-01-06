@@ -24,5 +24,5 @@ def run_pipeline(pipeline, task, use_cache=False):
         action(task, mbus, use_cache=use_cache)
         elapsed_time = time.clock() - prev_time
 
-        print "executing %s action took %s seconds (%s hours)" % (
+        print "executing %s action took %0.1f seconds (%0.1f hours)" % (
             action.__name__, elapsed_time, elapsed_time / 3600.0)
