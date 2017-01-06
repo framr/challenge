@@ -69,7 +69,7 @@ def merge_predictions(original_file, pred_file, result_file, target="vw",
 
                     result.write("%s,%s" % (line.strip(), prediction))
                     if apply_sigmoid:
-                        result.write(",%s" % 1.0 / (1.0 + exp(-float(prediction))))
+                        result.write(",%s" % (1.0 / (1.0 + exp(-float(prediction)))))
                     result.write("\n")
 
 
