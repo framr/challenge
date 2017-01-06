@@ -59,8 +59,10 @@ def merge_predictions(original_file, pred_file, result_file, target="vw",
         with open(original_file) as original:
             with open(pred_file)as predictions:
                 header = original.readline().strip()
-                new_header = "%s,%\n" % (header, target)
-                result.write(new_header)
+                new_header = "%s,%s" % (header, target)
+                if apply_sigmoid:
+                    new_header = "%s,sigmoid_%s" % (new_header, target)
+                result.write("%s\n" % new_header)
 
                 for line in original:
                     prediction = predictions.readline().strip()
