@@ -4,7 +4,7 @@ import yaml
 from outbrain.vw.vwutil import *
 from outbrain.vw.formatter import convert_csv2vw
 from outbrain.vw.learn import learn_vw
-from outbrain.vw.apply import VWAutoPredictor
+from outbrain.vw.apply import VWAutoPredictor, merge_predictions
 
 
 __all__ = []
@@ -106,12 +106,19 @@ def action__apply_vw(task, mbus, use_cache=False):
     mbus.predicted_learn = os.path.join(os.getcwd(), "learn_vw.predicted.txt")
     predictor.apply(mbus.learn_vw_file, mbus.predicted_learn)
 
-    # TODO: merge predictions file with original file
 
+    mbus.predicted_merged_learn = os.path.join(os.getcwd(), "learn_vw_merged.predicted.txt")
+    # TODO: merge predictions file with original file
+    merge_predictions(task["learn"]["learn_file"], mbus.predicted_learn, mbus.predicted_merged_learn)
 
     if mbus.test_vw_file is not None:
         mbus.predicted_test = os.path.join(os.getcwd(), "test_vw.predicted.txt")
         predictor.apply(mbus.test_vw_file, mbus.predicted_test)
+
+
+        mbus.predicted_merged_test = os.path.join(os.getcwd(), "test_vw_merged.predicted.txt")
+        # TODO: merge predictions file with original file
+        merge_predictions(task["test"]["test_file"], mbus.predicted_test, mbus.predicted_merged_test)
 
 
 @export

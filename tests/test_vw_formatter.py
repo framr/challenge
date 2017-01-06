@@ -13,7 +13,7 @@ def examples_vw_lines_task_fixture_for_autoformatter():
     task = {
         "click_field": "click",
         "learn": {
-            "vw": {"hashing_mode": "auto", "num_bits": 28, "manual_bias": False},
+            "vw": {"hashing_mode": "auto", "num_bits": 28, "manual_bias": False, "loss": "logistic"},
             "namespaces": ["ad_id", "document_id"],
             "quadratic": [],
             "cubic": []
@@ -22,8 +22,8 @@ def examples_vw_lines_task_fixture_for_autoformatter():
 
     # list of tuples of the form (example converted to list, vw_line)
     data = [
-        ([0, "1", "1"], "0 |ad_id 1|document_id 1"),
-        ([0, "1", "2"], "0 |ad_id 1|document_id 2"),
+        ([0, "1", "1"], "-1 |ad_id 1|document_id 1"),
+        ([0, "1", "2"], "-1 |ad_id 1|document_id 2"),
         ([1, "5", "1 2 3 4 5"], "1 |ad_id 5|document_id 1 2 3 4 5")
     ]
 
@@ -40,7 +40,7 @@ def task1():
         "feature_map": "./tests/fixtures/feature_map1.csv",
         "click_field": "click",
         "learn": {
-            "vw": {"hashing_mode": "manual", "num_bits": 25, "manual_bias": True},
+            "vw": {"hashing_mode": "manual", "num_bits": 25, "manual_bias": True, "loss": "logistic"},
             "namespaces": ["ad_id", "document_id"],
             "quadratic": [["ad_id", "document_id"]],
             "cubic": []
@@ -75,8 +75,8 @@ def examples_and_vw_lines_for_manualformatter_task1_feature_map1():
     example_cls = make_example_cls(["click", "ad_id", "document_id"])
 
     data = [
-        ([0, "1 3", "1"], "0 | 11 33 100 100011 999"),
-        ([0, "5", "2"], "0 | 200 999")
+        ([0, "1 3", "1"], "-1 | 11 33 100 100011 999"),
+        ([0, "5", "2"], "-1 | 200 999")
     ]
 
     result = []
@@ -92,7 +92,7 @@ def test_vw_auto_formatter1(examples_vw_lines_task_fixture_for_autoformatter):
 
     formatter = VWAutoFormatter(task)
     for example, vw_line in data:
-        result = formatter([example])
+        result = formatter([example]).strip()
         assert result == vw_line
 
 
@@ -100,7 +100,7 @@ def test_vw_manual_formatter1(task1, examples_and_vw_lines_for_manualformatter_t
 
     formatter = VWManualFormatter(task1, feature_map_file=task1["feature_map"])
     for example, vw_line in examples_and_vw_lines_for_manualformatter_task1_feature_map1:
-        result = formatter([example])
+        result = formatter([example]).strip()
         assert result == vw_line
 
 

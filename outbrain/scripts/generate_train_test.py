@@ -9,7 +9,7 @@ Example usage
 from argparse import ArgumentParser
 import yaml
 
-from outbrain.csvutil.util import generate_train_test_by_expression
+from outbrain.csvutil.splitter import generate_train_test_by_expression
 
 
 CONFIG_PARAMETERS = ["infile", "train", "test", "train_expr", "test_expr", "exec"]
