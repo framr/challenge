@@ -4,18 +4,17 @@ from .evaluator import *
 
 class MetricsGroupAggregator(object):
 
-    def __init__(self, evaluators=[],
+    def __init__(self, evaluators=None,
                  class_field=None,
                  predictions_field=None,
                  group_field=None
                  ):
-        self._evaluators = []
+        self._evaluators = evaluators
         self._group_field = group_field
         self._class_field = class_field
         self._predictions_field = predictions_field
 
     def __call__(self, infilename):
-
 
         metrics = dict((ev.NAME, 0) for ev in self._evaluators)
         with open(infilename) as infile:
@@ -34,12 +33,12 @@ def compute_metrics(infilename, config):
         LogLossEvaluator(
             config["class_field"],
             config["predictions_field"],
-            group_field=config.get("prediction_field", None)
+            group_field=config.get("group_field", None)
         ),
         MAPEvaluator(
             config["class_field"],
             config["predictions_field"],
-            group_field=config.get("prediction_field", None)
+            group_field=config.get("group_field", None)
         )
     ]
 
@@ -49,7 +48,6 @@ def compute_metrics(infilename, config):
     )
 
     metrics = aggregator(infilename)
-
     return metrics
 
 

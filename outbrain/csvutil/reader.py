@@ -24,11 +24,11 @@ def csv_file_iter(infile):
         yield example_cls(*line)
 
 
-def csv_file_group_iter(infile, group_field):
+def csv_file_group_iter(infile, group_field, separator=","):
     meta = infile.readline().strip()
     example_cls = make_example_cls(meta)
 
-    group_field_index = get_column_index_mapping(meta)[group_field]
+    group_field_index = get_column_index_mapping(meta.split(separator))[group_field]
     for group_key, group_iter in groupby(csv.reader(infile),
                                          key=lambda row: row[group_field_index]):
 

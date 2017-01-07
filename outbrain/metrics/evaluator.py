@@ -40,6 +40,7 @@ class LogLossEvaluator(MetricEvaluator):
             else:
                 raise ValueError("Class labels should be 0 or 1, while we've got %s" % label)
 
+        return loss
 
 
 @export
@@ -47,6 +48,8 @@ class MAPEvaluator(MetricEvaluator):
     """
         labels should be in {0, 1}
         """
+
+    NAME = "map"
 
     def __init__(self, class_field, predictions_field, group_field=None,
                  sort_by_prediction=True):
@@ -58,12 +61,12 @@ class MAPEvaluator(MetricEvaluator):
     def __call__(self, examples):
 
         loss = 0
-
         if self._sort_by_prediction:
             sorted_examples = sorted(examples,
-                                     key=lambda e: float(getattr(e, self._predictions_field,
-                                                                 reverse=True))
-        )
+                                     key=lambda e: float(getattr(e,self._predictions_field)),
+                                     reverse=True
+                                     )
+
         else:
             sorted_examples = list(examples)
 
@@ -77,5 +80,7 @@ class MAPEvaluator(MetricEvaluator):
             if label == 1:
                 result += float(cumulative_clicks) / (i + 1)
 
-        return result / float(cumulative_clicks)
+        if cumulative_clicks > 0:
+            result /= float(cumulative_clicks)
 
+        return result
