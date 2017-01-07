@@ -1,6 +1,7 @@
 #!/usr/bin/env python
-
+import time
 from argparse import ArgumentParser
+
 
 from outbrain.metrics.common import compute_metrics
 
@@ -26,5 +27,11 @@ if __name__ == "__main__":
         "group_field": args.group_field
     }
 
+
+    start = time.clock()
     metrics = compute_metrics(args.infile, config)
+    total_time = time.clock() - start
+    print "metrics evaluation took %0.1f seconds (%0.1f minutes)" % (
+        total_time, total_time / 60.0)
     print metrics
+
