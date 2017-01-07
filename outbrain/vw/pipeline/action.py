@@ -141,7 +141,7 @@ def action__compute_metrics(task, mbus, use_cache=False):
     for name, value in metrics.iteritems():
         print "%s = %f" % (name, value)
 
-    with open(mbus.metrics) as outfile:
+    with open(mbus.metrics, "w") as outfile:
         yaml.dump(metrics, outfile)
 
 
