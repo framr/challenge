@@ -18,7 +18,8 @@ DEFAULT_CONFIG = {
     "predicted_merged_learn": None,
     "predicted_merged_test": None,
     "predicted_test": None,
-    "metrics": None
+    "metrics_learn": None,
+    "metrics_test": None,
 }
 
 

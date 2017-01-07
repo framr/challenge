@@ -134,16 +134,24 @@ def action__apply_vw(task, mbus, use_cache=False):
 @export
 def action__compute_metrics(task, mbus, use_cache=False):
 
-    mbus.metrics = os.path.join(os.getcwd(), "metrics.yml")
-    metrics = compute_metrics(mbus.predicted_merged_learn, task["metrics"])
+    mbus.metrics_learn = os.path.join(os.getcwd(), "metrics_learn.yml")
+    metrics_learn = compute_metrics(mbus.predicted_merged_learn, task["metrics"])
 
-    metrics = compute_metrics(mbus.predicted_merged_learn, task["metrics"])
-    for name, value in metrics.iteritems():
+    for name, value in metrics_learn.iteritems():
         print "%s = %f" % (name, value)
+    with open(mbus.metrics_learn, "w") as outfile:
+        yaml.dump(metrics_learn, outfile)
 
-    with open(mbus.metrics, "w") as outfile:
-        yaml.dump(metrics, outfile)
+    if not mbus.predicted_merged_test:
+        return
 
+    mbus.metrics_test = os.path.join(os.getcwd(), "metrics_test.yml")
+    metrics_test = compute_metrics(mbus.predicted_merged_test, task["metrics"])
+
+    for name, value in metrics_test.iteritems():
+        print "%s = %f" % (name, value)
+    with open(mbus.metrics_test, "w") as outfile:
+        yaml.dump(metrics_test, outfile)
 
 
 @export
