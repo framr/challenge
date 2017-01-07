@@ -10,6 +10,7 @@ DEFAULT_VW_PIPELINE = [
     action__prepare_log_for_vw,
     action__learn_vw,
     action__apply_vw,
+    action__compute_metrics,
     action__save_message_bus
 ]
 
