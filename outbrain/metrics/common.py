@@ -26,8 +26,8 @@ class MetricsGroupAggregator(object):
                 for evaluator in self._evaluators:
                     metrics[evaluator.NAME] += evaluator(examples_batch)
 
-        for name, value in metrics.items():
-            metrics["avg_%s" % evaluator.NAME] = metrics[name] / examples_count
+        for metric_name in metrics.keys():
+            metrics["avg_%s" % metric_name] = metrics[metric_name] / float(examples_count)
 
         return metrics
 

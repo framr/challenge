@@ -36,3 +36,7 @@ learn:
 test:
   test_file:
 
+metrics:
+  class_field: clicked
+  predictions_field: sigmoid_vw
+  group_field: display_id

@@ -5,7 +5,7 @@ from outbrain.vw.vwutil import *
 from outbrain.vw.formatter import convert_csv2vw
 from outbrain.vw.learn import learn_vw
 from outbrain.vw.apply import VWAutoPredictor, merge_predictions
-from outbrain.metrics.common import
+from outbrain.metrics.common import compute_metrics
 
 
 __all__ = []
@@ -124,8 +124,9 @@ def action__apply_vw(task, mbus, use_cache=False):
 
 @export
 def action__compute_metrics(task, mbus, use_cache=False):
-    pass
-    #action__compute_metrics
+
+    mbus.metrics = os.path.join(os.getcwd(), "metrics.yml")
+    compute_metrics(mbus.predicted_merged_learn, task["metrics"])
 
 
 @export
