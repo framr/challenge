@@ -12,7 +12,7 @@ if __name__ == "__main__":
     argparser.add_argument("-i", dest="infile", default=None, help="input filename")
     argparser.add_argument("--click", dest="click_field", default="clicked",
                            help="column with class label (click)")
-    argparser.add_argument("--pred", dest="pred_field", default="sigmoid_VW",
+    argparser.add_argument("--pred", dest="pred_field", default="sigmoid_vw",
                            help="column with predictions (click probability)")
     argparser.add_argument("-g", dest="group_field", default=None,
                            help="column with group field")

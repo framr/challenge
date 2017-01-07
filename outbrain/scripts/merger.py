@@ -66,7 +66,7 @@ if __name__ == '__main__':
     argparser.add_argument("--out", dest="output", type=str, default=None, help="output file", required=True)
     argparser.add_argument("--key", dest="sort_column", type=str, default=None,
                            help="column used for sorting", required=True)
-    argparser.add_argument("--sort-args", dest="sort_args", type=str, default="-g",
+    argparser.add_argument("--sort-args", dest="sort_args", type=str, default="-g --stable",
                            help="additional sort arguments")
     argparser.add_argument("--separator", dest="separator", type=str, default=",",
                            help="csv file separator")
