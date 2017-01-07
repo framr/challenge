@@ -105,28 +105,45 @@ def action__apply_vw(task, mbus, use_cache=False):
     predictor = VWAutoPredictor(model_path)
 
     mbus.predicted_learn = os.path.join(os.getcwd(), "learn_vw.predicted.txt")
-    predictor.apply(mbus.learn_vw_file, mbus.predicted_learn)
-
-
     mbus.predicted_merged_learn = os.path.join(os.getcwd(), "learn_vw_merged.predicted.txt")
-    # TODO: merge predictions file with original file
-    merge_predictions(task["learn"]["learn_file"], mbus.predicted_learn, mbus.predicted_merged_learn)
+
+    if use_cache and os.path.isfile(mbus.predicted_learn) and os.path.isfile(mbus.predicted_merged_learn):
+        print "found cached files with predictions %s and %s, skipping applying vw" % (
+            mbus.predicted_learn, mbus.predicted_merged_learn)
+    else:
+        predictor.apply(mbus.learn_vw_file, mbus.predicted_learn)
+        merge_predictions(task["learn"]["learn_file"], mbus.predicted_learn, mbus.predicted_merged_learn)
 
     if mbus.test_vw_file is not None:
+
         mbus.predicted_test = os.path.join(os.getcwd(), "test_vw.predicted.txt")
-        predictor.apply(mbus.test_vw_file, mbus.predicted_test)
-
-
         mbus.predicted_merged_test = os.path.join(os.getcwd(), "test_vw_merged.predicted.txt")
-        # TODO: merge predictions file with original file
-        merge_predictions(task["test"]["test_file"], mbus.predicted_test, mbus.predicted_merged_test)
+
+        if (use_cache
+            and os.path.isfile(mbus.predicted_test)
+            and os.path.isfile(mbus.predicted_merged_test)
+        ):
+            print "found cached files with predictions %s and %s, skipping applying vw" % (
+            mbus.predicted_test, mbus.predicted_merged_test)
+
+        else:
+            predictor.apply(mbus.test_vw_file, mbus.predicted_test)
+            merge_predictions(task["test"]["test_file"], mbus.predicted_test, mbus.predicted_merged_test)
 
 
 @export
 def action__compute_metrics(task, mbus, use_cache=False):
 
     mbus.metrics = os.path.join(os.getcwd(), "metrics.yml")
-    compute_metrics(mbus.predicted_merged_learn, task["metrics"])
+    metrics = compute_metrics(mbus.predicted_merged_learn, task["metrics"])
+
+    metrics = compute_metrics(mbus.predicted_merged_learn, task["metrics"])
+    for name, value in metrics.iteritems():
+        print "%s = %f" % (name, value)
+
+    with open(mbus.metrics) as outfile:
+        yaml.dump(metrics, outfile)
+
 
 
 @export
