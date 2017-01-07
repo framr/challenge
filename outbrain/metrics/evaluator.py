@@ -20,6 +20,7 @@ class LogLossEvaluator(MetricEvaluator):
     labels should be in {0, 1}
     """
     NAME = "logloss"
+    GROUP_METRICS = False
 
     def __init__(self, class_field, predictions_field, group_field=None):
         self._group_field = group_field
@@ -53,6 +54,7 @@ class MAPEvaluator(MetricEvaluator):
         """
 
     NAME = "map"
+    GROUP_METRICS = True
 
     def __init__(self, class_field, predictions_field, group_field=None,
                  sort_by_prediction=True):

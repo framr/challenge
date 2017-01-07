@@ -31,4 +31,7 @@ if __name__ == "__main__":
     total_time = time.clock() - start
     print "metrics evaluation took %0.1f seconds (%0.1f minutes)" % (
         total_time, total_time / 60.0)
-    print metrics
+
+    print "=" * 80
+    for name, value in metrics.iteritems():
+        print "%s = %f" % (name, value)
