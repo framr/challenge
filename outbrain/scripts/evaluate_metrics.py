@@ -2,9 +2,7 @@
 import time
 from argparse import ArgumentParser
 
-
 from outbrain.metrics.common import compute_metrics
-
 
 
 if __name__ == "__main__":
@@ -34,4 +32,3 @@ if __name__ == "__main__":
     print "metrics evaluation took %0.1f seconds (%0.1f minutes)" % (
         total_time, total_time / 60.0)
     print metrics
-

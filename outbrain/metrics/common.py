@@ -17,12 +17,17 @@ class MetricsGroupAggregator(object):
     def __call__(self, infilename):
 
         metrics = dict((ev.NAME, 0) for ev in self._evaluators)
+        examples_count = 0
         with open(infilename) as infile:
             for group_key, examples_batch in csv_file_group_iter(infile,
                                                                  group_field=self._group_field):
 
+                examples_count += len(examples_batch)
                 for evaluator in self._evaluators:
                     metrics[evaluator.NAME] += evaluator(examples_batch)
+
+        for name, value in metrics.iteritems():
+            metrics["avg_%s" % evaluator.NAME] = metrics[name] / examples_count
 
         return metrics
 

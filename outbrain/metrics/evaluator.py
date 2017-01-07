@@ -25,10 +25,13 @@ class LogLossEvaluator(MetricEvaluator):
         self._group_field = group_field
         self._class_field = class_field
         self._predictions_field = predictions_field
+        self._total_examples = 0
 
     def __call__(self, examples):
 
         loss = 0
+        self._total_examples += len(examples)
+
         for example in examples:
             label = int(getattr(example, self._class_field))
             pred = float(getattr(example, self._predictions_field))
