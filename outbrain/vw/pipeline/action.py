@@ -1,12 +1,13 @@
 import os
 import yaml
 
-from outbrain.vw.vwutil import *
+from outbrain.metrics.common import compute_metrics
+from outbrain.preprocess.common import apply_mapreducers
+from outbrain.preprocess.mapper import Join, ProcessGeoData, CountAdsInBlock
+from outbrain.vw.apply import VWAutoPredictor, merge_predictions
 from outbrain.vw.formatter import convert_csv2vw
 from outbrain.vw.learn import learn_vw
-from outbrain.vw.apply import VWAutoPredictor, merge_predictions
-from outbrain.metrics.common import compute_metrics
-
+from outbrain.vw.vwutil import *
 
 __all__ = []
 def export(func):
@@ -162,9 +163,13 @@ def action__save_message_bus(task, mbus, use_cache=False):
 
 @export
 def action__preprocess(task, mbus, use_cache=False):
-    pass
-    # preprocess geo data
-    # join categories
+
+    reducers = [
+        CountAdsInBlock(),
+        Join(),
+        ProcessGeoData()
+    ]
+    apply_mapreducers()
 
 
 

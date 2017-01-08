@@ -1,5 +1,4 @@
-from subprocess import Popen, check_call
-from logging import Logger
+from subprocess import check_call
 
 
 class BasicLearner(object):
@@ -14,6 +13,7 @@ class VWLearner(BasicLearner):
 
 def get_vw_launch_args(task):
 
+    # TODO: ADD QUADRATICS!!!
     vw_opts = task["learn"]["vw"]
 
     args = [vw_opts["binary"]]
