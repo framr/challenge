@@ -5,6 +5,7 @@ from outbrain.vw.pipeline.message_bus import get_message_bus
 
 
 DEFAULT_VW_PIPELINE = [
+    action__preprocess_geo,
     action__compute_feature_stats,
     action__compute_feature_map,
     action__prepare_log_for_vw,

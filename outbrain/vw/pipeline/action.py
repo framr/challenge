@@ -160,5 +160,16 @@ def action__save_message_bus(task, mbus, use_cache=False):
         outfile.write(yaml.dump(mbus))
 
 
+@export
+def action__preprocess(task, mbus, use_cache=False):
+    pass
+    # preprocess geo data
+    # join categories
+
+
+
+
+
+
 
 
