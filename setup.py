@@ -4,7 +4,6 @@ import sys
 from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
 
-
 with open('requirements.txt') as fd:
     requirements = [line.rstrip() for line in fd]
 
@@ -41,5 +40,5 @@ setup(name='outbrain',
       packages=find_packages(),
       scripts=['outbrain/scripts/vw_pipeline_runner.py', 'outbrain/scripts/generate_train_test.py',
                'outbrain/scripts/csvsort.py', 'outbrain/scripts/merger.py',
-               'outbrain/scripts/evaluate_metrics.py']
+               'outbrain/scripts/evaluate_metrics.py', 'outbrain/scripts/vw_pipeline_generator.py']
 )
