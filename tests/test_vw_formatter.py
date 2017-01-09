@@ -12,6 +12,7 @@ def examples_vw_lines_task_fixture_for_autoformatter():
     task = {
         "click_field": "click",
         "learn": {
+            "ns_rename": {},
             "vw": {"hashing_mode": "auto", "num_bits": 28, "manual_bias": False, "loss": "logistic"},
             "namespaces": ["ad_id", "document_id"],
             "quadratic": [],
