@@ -78,6 +78,9 @@ class ProcessGeoData(Mapper):
             setattr(example, "geo_state", state)
             setattr(example, "geo_dma", dma)
 
+class ProcessTimestamp(Mapper):
+    pass
+
 
 class CountAdsInBlock(MapReducer):
     """

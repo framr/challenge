@@ -29,4 +29,3 @@ def run_pipeline(pipeline, task, use_cache=False):
 
         print "executing %s action took %0.1f seconds (%0.1f hours)" % (
             action.__name__, elapsed_time, elapsed_time / 3600.0)
-
