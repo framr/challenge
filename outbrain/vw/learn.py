@@ -9,8 +9,6 @@ class VWLearner(BasicLearner):
         pass
 
 
-
-
 def get_vw_launch_args(task):
 
     # TODO: ADD QUADRATICS!!!
@@ -41,6 +39,11 @@ def get_vw_launch_args(task):
 
     if vw_opts["hashing_mode"] == "manual":
         args.extend(["--hash", "strings"])
+    else:
+        quad = task["learn"]["quadratic"]
+        vw_quad_pairs = ["-q %s%s" % (task["learn"]["ns_rename"][first][0], task["learn"]["ns_rename"][second][0])
+            for first, second in quad]
+        args.extend(vw_quad_pairs)
 
     return " ".join(map(str, args))
 
@@ -49,6 +52,7 @@ def learn_vw(learn_file, task):
 
     #logger = Logger()
     args = get_vw_launch_args(task)
+    print "vw launch command %s" % args
     with open(learn_file) as infile:
         with open('./vw.stderr', 'w') as stderr_file:
             with open('./vw.stdout', 'w') as stdout_file:

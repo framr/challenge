@@ -38,12 +38,11 @@ Including a feature but omitting its value means that its value is 1.
 """
 
 from cStringIO import StringIO
-from .crr import expand_crr_pairs
 
-from ..csvutil.reader import csv_file_iter
 from .feature import FeatureEmitter
-from .vwutil import read_feature_stats, read_feature_map
 from .vwhash import truncate_to_num_bits
+from .vwutil import read_feature_stats, read_feature_map
+from ..csvutil.reader import csv_file_iter
 
 
 def get_vw_formatter(task, feature_stats_file=None, feature_map_file=None):
@@ -151,13 +150,14 @@ class VWAutoFormatter(VWFormatter):
             for ns in self._namespaces:
                 features = getattr(example, ns).strip().split(self._feature_separator)
 
+                vw_ns = self._task["learn"]["ns_rename"]
                 if self._min_shows > 1:
                     # optionally filter features with low statistics
                     features = [f for f in features
                                 if self._feature_stats[ns].get(f, 0) >= self._min_shows]
-                    buffer.write("|%s %s" % (ns, " ".join(features)))
+                    buffer.write("|%s %s" % (vw_ns, " ".join(features)))
                 else:
-                    buffer.write("|%s %s" % (ns, " ".join(features)))
+                    buffer.write("|%s %s" % (vw_ns, " ".join(features)))
 
             #if num_example + 1 < len(examples):
             buffer.write("\n")

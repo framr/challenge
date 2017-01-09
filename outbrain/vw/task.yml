@@ -13,6 +13,10 @@ learn:
     - [ad_id, document_id]
   cubic:
 
+  ns_rename:
+    ad_id: ad_id
+    document_id: document_id
+
   learn_file:
 
   vw:
