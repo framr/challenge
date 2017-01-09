@@ -38,7 +38,13 @@ setup(name='outbrain',
       tests_require=test_requirements,
       cmdclass={'test': PyTest},
       packages=find_packages(),
-      scripts=['outbrain/scripts/vw_pipeline_runner.py', 'outbrain/scripts/generate_train_test.py',
-               'outbrain/scripts/csvsort.py', 'outbrain/scripts/merger.py',
-               'outbrain/scripts/evaluate_metrics.py', 'outbrain/scripts/vw_pipeline_generator.py']
+      scripts=['outbrain/scripts/vw_pipeline_runner.py',
+               'outbrain/scripts/generate_train_test.py',
+               'outbrain/scripts/csvsort.py',
+               'outbrain/scripts/merger.py',
+               'outbrain/scripts/evaluate_metrics.py',
+               'outbrain/scripts/vw_pipeline_generator.py',
+               'outbrain/scripts/preprocess_common.py',
+               'outbrain/scripts/filter_categories.py',
+               ]
 )

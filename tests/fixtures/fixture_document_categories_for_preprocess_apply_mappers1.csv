@@ -1,0 +1,7 @@
+document_id,category_id,entity_id,some_weird_field
+11,1,30,a
+11,2,40,a
+14,1,100,a
+14,4,200,a
+14,5,300,a
+15,1,30,a

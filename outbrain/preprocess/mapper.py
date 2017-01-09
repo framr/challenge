@@ -3,6 +3,12 @@ from datetime import datetime
 
 from ..csvutil.reader import csv_file_iter
 
+__all__ = []
+def export(func):
+    __all__.append(func.__name__)
+    return func
+
+
 
 class Mapper(object):
     @property
@@ -15,7 +21,7 @@ class MapReducer(object):
         return self._add_fields
 
 
-
+@export
 class Join(Mapper):
     """
     Plain old MapJoin
@@ -51,11 +57,13 @@ class Join(Mapper):
     def __call__(self, examples):
         for example in examples:
             for field in self._add_fields:
+                #print "field=%s" % field
                 key = self._get_key(example)
                 value = " ".join(self._data[field].get(key, []))
                 setattr(example, field, value)
+                #print example
 
-
+@export
 class ProcessGeoData(Mapper):
     """
     Mapper parsing geo data
@@ -79,6 +87,8 @@ class ProcessGeoData(Mapper):
             example.geo_state = state
             example.geo_dma = dma
 
+
+@export
 class ProcessTimestamp(Mapper):
 
     def __init__(self, field="timestamp"):
@@ -92,16 +102,16 @@ class ProcessTimestamp(Mapper):
             example.date_hour = str(d.hour)
 
 
+@export
 class CountAdsInBlock(MapReducer):
     """
     This is a pure reducer, i.e. we have to guarantee
     that all examples with one key are in a batch
     """
-    def __init__(self, target="ads_count"):
-        self._target = target
-        self._add_fields = [target]
+    def __init__(self):
+        self._add_fields = ["ads_count"]
 
     def __call__(self, examples_group):
         ads_count = len(examples_group)
         for example in examples_group:
-            setattr(example, self._target, ads_count)
+            example.ads_count = ads_count

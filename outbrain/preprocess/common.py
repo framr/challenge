@@ -1,6 +1,5 @@
 
-from ..csvutil.reader import csv_file_iter, csv_file_group_iter
-from .mapper import *
+from ..csvutil.reader import csv_file_group_iter_mutable
 
 
 class MapStreamer(object):
@@ -31,7 +30,7 @@ class ReduceStreamer(object):
 
     def _write_batch_to_stream(self, batch, fields, outstream):
         for example in batch:
-            res = [getattr(example, field) for field in fields]
+            res = [str(getattr(example, field)) for field in fields]
             outstream.write("%s\n" % self._separator.join(res))
 
     def __call__(self):
@@ -41,12 +40,13 @@ class ReduceStreamer(object):
         new_header = "%s%s%s\n" % (header, self._separator,
                                  self._separator.join(self.add_fields))
 
+        out_fields = new_header.strip().split(self._separator)
 
         with open(self._outfilename, "w") as outfile:
             outfile.write(new_header)
 
             with open(self._infilename) as infile:
-                for group_key, examples_batch in csv_file_group_iter(
+                for group_key, examples_batch in csv_file_group_iter_mutable(
                         infile,
                         group_field=self._group_field
                         ):
@@ -57,7 +57,7 @@ class ReduceStreamer(object):
                     for reducer in self._reducers:
                         reducer(examples_batch)
 
-                    self._write_batch_to_stream(examples_batch, new_header.split(self._separator),
+                    self._write_batch_to_stream(examples_batch, out_fields,
                                                 outfile)
 
 

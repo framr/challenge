@@ -1,17 +1,14 @@
 import csv
 from collections import namedtuple
-from itertools import groupby, izip
-from attrdict import AttrDict
+from itertools import groupby
 
+from attrdict import AttrDict
 
 from .util import get_column_index_mapping
 
 
-def make_example_cls(fields, mutable=False):
-    if not mutable:
-        Example = namedtuple('Example', fields)
-    else:
-        Example = AttrDict(fields)
+def make_example_cls(fields):
+    Example = namedtuple('Example', fields)
     return Example
 
 
@@ -78,12 +75,18 @@ def csv_file_group_iter_mutable(infile, group_field, separator=","):
 
     # TODO: support multi-field keys
     header = infile.readline().strip().split(separator)
-    example_cls = make_example_cls(mutable=True)
 
-    group_field_index = get_column_index_mapping(header.split(separator))[group_field]
+    group_field_index = get_column_index_mapping(header)[group_field]
     for group_key, group_iter in groupby(csv.reader(infile),
                                          key=lambda row: row[group_field_index]):
 
-        examples = [example_cls(dict(izip(header, row))) for row in group_iter]
+        examples = [AttrDict(dict(zip(header, row))) for row in group_iter]
+        #for row in group_iter:
+        #    print dict(zip(header, row))
+        #    print AttrDict(dict(zip(header, row)))
+        #examples = []
+
+        #for e in examples:
+        #    print e
         yield group_key, examples
 
