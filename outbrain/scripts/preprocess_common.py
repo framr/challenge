@@ -6,12 +6,22 @@ from outbrain.preprocess.common import ReduceStreamer
 from outbrain.preprocess.mapper import *
 
 
-# Sorry for hardcode, we are running out of time!
-JOIN_FILES=[
-    ("documents_categories.csv", "document_id", "category_id"),
-    ("documents_entities.csv", "document_id", "entity_id"),
-    ("documents_topics", "document_id", "topic_id"),
+# Sorry for hardcoding, we are running out of time!
+JOIN_CONF=[
+    ("/home/fram/kaggle/outbrain/playground/input/documents_meta/ad_documents_categories_gt0.5.csv", "ad_category05_id", "ad_document_id"),
+    ("/home/fram/kaggle/outbrain/playground/input/documents_meta/ad_documents_categories_gt0.9.csv", "ad_category09_id", "ad_document_id"),
+    ("/home/fram/kaggle/outbrain/playground/input/documents_meta/ad_documents_entities_gt0.9.csv", "ad_entity09_id", "ad_document_id"),
+    ("/home/fram/kaggle/outbrain/playground/input/documents_meta/ad_documents_entities_gt0.5.csv", "ad_entity05_id", "ad_document_id"),
+    ("/home/fram/kaggle/outbrain/playground/input/documents_meta/ad_documents_topics_gt0.05.csv", "ad_topic005_id", "ad_document_id"),
+    ("/home/fram/kaggle/outbrain/playground/input/documents_meta/ad_documents_topics_gt0.1.csv", "ad_topic01_id", "ad_document_id"),
+    ("/home/fram/kaggle/outbrain/playground/input/documents_meta/documents_categories_gt0.5.csv", "category05_id", "document_id"),
+    ("/home/fram/kaggle/outbrain/playground/input/documents_meta/documents_categories_gt0.9.csv", "category09_id", "document_id"),
+    ("/home/fram/kaggle/outbrain/playground/input/documents_meta/documents_entities_gt0.9.csv", "entity09_id", "document_id"),
+    ("/home/fram/kaggle/outbrain/playground/input/documents_meta/documents_entities_gt0.5.csv", "entity05_id", "document_id"),
+    ("/home/fram/kaggle/outbrain/playground/input/documents_meta/documents_topics_gt0.05.csv", "topic005_id", "document_id"),
+    ("/home/fram/kaggle/outbrain/playground/input/documents_meta/documents_topics_gt0.1.csv", "topic01_id", "document_id")
 ]
+
 
 if __name__ == "__main__":
 
@@ -31,7 +41,7 @@ if __name__ == "__main__":
         ProcessGeoData("geo_location")
         ]
 
-    for join_file, join_key, field in JOIN_FILES:
+    for join_file, field, join_key in JOIN_CONF:
         reducers.append(
             Join(
                 join_file=join_file,
