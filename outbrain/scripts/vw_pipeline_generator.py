@@ -13,6 +13,8 @@ if __name__ == "__main__":
     with open("run_pipeline_%s" % os.path.basename(task_dir), "w") as outfile:
         tasks = os.listdir(task_dir)
         for task in tasks:
+            if not task.endswith("yml"):
+                continue
             outfile.write("vw_pipeline_runner.py --task %s --outdir /home/fram/kaggle/outbrain/playground/vw/models --cache\n"
                           % os.path.join(task_dir, task))
 

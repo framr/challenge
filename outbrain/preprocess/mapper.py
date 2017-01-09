@@ -1,4 +1,5 @@
 from collections import defaultdict
+from datetime import datetime
 
 from ..csvutil.reader import csv_file_iter
 
@@ -74,12 +75,21 @@ class ProcessGeoData(Mapper):
             if len(geo_data) >= 3:
                 dma = geo_data[2]
 
-            setattr(example, "geo_country", country)
-            setattr(example, "geo_state", state)
-            setattr(example, "geo_dma", dma)
+            example.geo_country = country
+            example.geo_state = state
+            example.geo_dma = dma
 
 class ProcessTimestamp(Mapper):
-    pass
+
+    def __init__(self, field="timestamp"):
+        self._field = field
+        self._add_fields = ["date_weekday", "date_hour"]
+
+    def __call__(self, examples):
+        for example in examples:
+            d = datetime.fromtimestamp(float(getattr(example, self._field)) / 1000.0)
+            example.date_weekday = str(d.weekday())
+            example.date_hour = str(d.hour)
 
 
 class CountAdsInBlock(MapReducer):

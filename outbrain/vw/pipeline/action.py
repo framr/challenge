@@ -2,7 +2,6 @@ import os
 import yaml
 
 from outbrain.metrics.common import compute_metrics
-from outbrain.preprocess.common import apply_mapreducers
 from outbrain.preprocess.mapper import Join, ProcessGeoData, CountAdsInBlock
 from outbrain.vw.apply import VWAutoPredictor, merge_predictions
 from outbrain.vw.formatter import convert_csv2vw
@@ -169,7 +168,7 @@ def action__preprocess(task, mbus, use_cache=False):
         Join(),
         ProcessGeoData()
     ]
-    apply_mapreducers()
+    #apply_mapreducers(reducers=reducers)
 
 
 
