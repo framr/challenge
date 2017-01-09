@@ -150,7 +150,7 @@ class VWAutoFormatter(VWFormatter):
             for ns in self._namespaces:
                 features = getattr(example, ns).strip().split(self._feature_separator)
 
-                vw_ns = self._task["learn"]["ns_rename"]
+                vw_ns = self._task["learn"]["ns_rename"].get(ns, ns)
                 if self._min_shows > 1:
                     # optionally filter features with low statistics
                     features = [f for f in features

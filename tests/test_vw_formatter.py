@@ -1,5 +1,4 @@
 import pytest
-import yaml
 
 from outbrain.csvutil.reader import make_example_cls
 from outbrain.vw.formatter import VWAutoFormatter, VWManualFormatter
@@ -40,6 +39,7 @@ def task1():
         "feature_map": "./tests/fixtures/feature_map1.csv",
         "click_field": "click",
         "learn": {
+            "ns_rename": {},
             "vw": {"hashing_mode": "manual", "num_bits": 25, "manual_bias": True, "loss": "logistic"},
             "namespaces": ["ad_id", "document_id"],
             "quadratic": [["ad_id", "document_id"]],

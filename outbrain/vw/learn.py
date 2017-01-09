@@ -41,8 +41,13 @@ def get_vw_launch_args(task):
         args.extend(["--hash", "strings"])
     else:
         quad = task["learn"]["quadratic"]
-        vw_quad_pairs = ["-q %s%s" % (task["learn"]["ns_rename"][first][0], task["learn"]["ns_rename"][second][0])
-            for first, second in quad]
+        vw_quad_pairs = [
+            "-q %s%s" % (
+            task["learn"]["ns_rename"].get(first, first)[0],
+            task["learn"]["ns_rename"].get(second, second)[0]
+            )
+                for first, second in quad]
+
         args.extend(vw_quad_pairs)
 
     return " ".join(map(str, args))
