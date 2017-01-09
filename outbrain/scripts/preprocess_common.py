@@ -6,6 +6,7 @@ from outbrain.preprocess.common import ReduceStreamer
 from outbrain.preprocess.mapper import *
 
 
+# Sorry for hardcode, we are running out of time!
 JOIN_FILES=[
     ("documents_categories.csv", "document_id", "category_id"),
     ("documents_entities.csv", "document_id", "entity_id"),

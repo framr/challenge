@@ -159,6 +159,9 @@ def action__save_message_bus(task, mbus, use_cache=False):
     with open("message_bus.yml", "w") as outfile:
         outfile.write(yaml.dump(mbus))
 
+    with open("task.yml", "w") as outfile:
+        outfile.write(yaml.dump(task))
+
 
 @export
 def action__preprocess(task, mbus, use_cache=False):
