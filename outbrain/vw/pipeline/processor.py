@@ -1,5 +1,6 @@
 import time
 
+import outbrain.vw.pipeline.action
 from outbrain.vw.pipeline.action import *
 from outbrain.vw.pipeline.message_bus import get_message_bus
 
@@ -16,9 +17,19 @@ DEFAULT_VW_PIPELINE = [
 ]
 
 
+def read_pipeline_from_task(task, default_pipeline=None):
+
+    if task.get("pipeline", None):
+        pipeline = [getattr(outbrain.vw.pipeline.action, stage) for stage in task["pipeline"]]
+    else:
+        pipeline = default_pipeline
+
+    return pipeline
+
 def run_pipeline(pipeline, task, use_cache=False):
 
     mbus = get_message_bus()
+    mbus.timing = {}
     for action in pipeline:
 
         print "=" * 80
@@ -27,5 +38,6 @@ def run_pipeline(pipeline, task, use_cache=False):
         action(task, mbus, use_cache=use_cache)
         elapsed_time = time.clock() - prev_time
 
-        print "executing %s action took %0.1f seconds (%0.1f hours)" % (
-            action.__name__, elapsed_time, elapsed_time / 3600.0)
+        print "executing %s action took %0.1f seconds (%0.1f mins)" % (
+            action.__name__, elapsed_time, elapsed_time / 60.0)
+        mbus.timing[action.__name__] = elapsed_time / 60.0

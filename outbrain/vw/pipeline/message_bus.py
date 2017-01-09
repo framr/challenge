@@ -1,6 +1,6 @@
 import os
-from attrdict import AttrDict
 
+from attrdict import AttrDict
 
 DEFAULT_CONFIG = {
     "learn_vw_file": None,
@@ -20,6 +20,7 @@ DEFAULT_CONFIG = {
     "predicted_test": None,
     "metrics_learn": None,
     "metrics_test": None,
+    "timing": None
 }
 
 

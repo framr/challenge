@@ -6,6 +6,16 @@ min_shows: 5
 create_feature_map: false
 create_feature_stats: true
 
+pipeline:
+  - action__preprocess
+  - action__compute_feature_stats
+  - action__compute_feature_map
+  - action__prepare_log_for_vw
+  - action__learn_vw
+  - action__apply_vw
+  - action__compute_metrics
+  - action__save_message_bus
+
 learn:
   namespaces:
     - ad_id

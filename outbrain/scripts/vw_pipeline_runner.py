@@ -16,12 +16,10 @@ We have two posible pipelines here
 """
 
 import os
-from argparse import ArgumentParser
 import yaml
+from argparse import ArgumentParser
 
-
-from outbrain.vw.pipeline.processor import run_pipeline, DEFAULT_VW_PIPELINE
-
+from outbrain.vw.pipeline.processor import run_pipeline, DEFAULT_VW_PIPELINE, read_pipeline_from_task
 
 if __name__ == "__main__":
 
@@ -46,6 +44,9 @@ if __name__ == "__main__":
     print "Setting working directory to %s" % work_dir
     os.chdir(work_dir)
 
+
+
+    pipeline = read_pipeline_from_task(task, default_pipeline=DEFAULT_VW_PIPELINE)
     print "Processing pipeline"
-    run_pipeline(DEFAULT_VW_PIPELINE, task, use_cache=args.use_cache)
+    run_pipeline(pipeline, task, use_cache=args.use_cache)
 
