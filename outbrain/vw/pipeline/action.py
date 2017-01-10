@@ -6,10 +6,7 @@ from outbrain.preprocess.mapper import Join, ProcessGeoData, CountAdsInBlock
 from outbrain.vw.apply import VWAutoPredictor, merge_predictions
 from outbrain.vw.formatter import convert_csv2vw
 from outbrain.vw.learn import learn_vw
-from outbrain.vw.vwutil import *
-
-#from outbrain.vw.vwutil_fast import create_feature_stats_file_fast
-
+from outbrain.vw.vwutil_fast import create_feature_stats_file_fast
 
 __all__ = []
 def export(func):
@@ -29,7 +26,8 @@ def action__compute_feature_stats(task, mbus, use_cache=False):
         print "ouput feature stats already exists, using it from cache %s" % mbus.feature_stats
     else:
         infile = task["learn"]["learn_file"]
-        create_feature_stats_file(infile, task, mbus.feature_stats)
+        #create_feature_stats_file(infile, task, mbus.feature_stats)
+        create_feature_stats_file_fast(infile, task, mbus.feature_stats)
 
 
 @export
