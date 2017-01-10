@@ -85,7 +85,8 @@ if __name__ == "__main__":
         args.output,
         task,
         feature_stats_file=feature_stats_file,
-        feature_map_file=feature_map_file
+        feature_map_file=feature_map_file,
+        test_mode=True
     )
 
     infile = task["learn"]["learn_file"]

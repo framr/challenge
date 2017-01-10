@@ -45,25 +45,25 @@ from .vwutil_fast import read_feature_stats, read_feature_map
 from ..csvutil.reader import csv_file_iter
 
 
-def get_vw_formatter(task, feature_stats_file=None, feature_map_file=None):
+def get_vw_formatter(task, feature_stats_file=None, feature_map_file=None, test_mode=False):
     if task['learn']['vw']['hashing_mode'] == 'auto':
         print "Using vowpal wabbit auto formatter"
         formatter = VWAutoFormatter(task, feature_stats_file=feature_stats_file,
-                                    feature_map_file=feature_map_file)
+                                    feature_map_file=feature_map_file, test_mode=test_mode)
     elif task['learn']['vw']['hashing_mode'] == 'manual':
         print "Using vowpal wabbit manual formatter"
         formatter = VWManualFormatter(task, feature_stats_file=feature_stats_file,
-                                      feature_map_file=feature_map_file)
+                                      feature_map_file=feature_map_file, test_mode=test_mode)
     else:
         raise NotImplementedError
     return formatter
 
 
 def convert_csv2vw_fast(infile_name, outfile_name, task,
-                   feature_stats_file=None, feature_map_file=None, batch_size=10):
+                   feature_stats_file=None, feature_map_file=None, batch_size=10, test_mode=False):
 
     formatter = get_vw_formatter(task, feature_stats_file=feature_stats_file,
-                                 feature_map_file=feature_map_file)
+                                 feature_map_file=feature_map_file, test_mode=test_mode)
 
     cdef list examples_batch = []
     num_rows = 0
@@ -120,7 +120,7 @@ class VWAutoFormatter(object):
     cubic features and bias is done by vw.
     """
 
-    def __init__(self, task, feature_stats_file=None, feature_map_file=None):
+    def __init__(self, task, feature_stats_file=None, feature_map_file=None, test_mode=False):
 
         self._task = task
         self._click_field = task["click_field"]
@@ -128,6 +128,9 @@ class VWAutoFormatter(object):
         self._quadratic = task["learn"]["quadratic"]
         self._cubic = task["learn"]["cubic"]
         self._loss = task["learn"]["vw"]["loss"]
+
+        self._test_mode = test_mode
+        print "test mode = %s" % str(self._test_mode)
 
         self._min_shows = task.get('min_shows', 1)
         self._feature_stats_filename = feature_stats_file
@@ -149,8 +152,12 @@ class VWAutoFormatter(object):
 
         cdef list features
         for num_example, example in enumerate(examples):
-            #print getattr(example, self._click_field)
-            class_label = normalize_label(getattr(example, self._click_field), self._loss)
+
+            if self._test_mode:
+                class_label = "-1"
+            else:
+                class_label = normalize_label(getattr(example, self._click_field), self._loss)
+
             buffer.write("%s " % class_label)
             for ns in self._namespaces:
                 features = getattr(example, ns).strip().split()
@@ -180,9 +187,14 @@ class VWManualFormatter(VWFormatter):
     here we accept feature if it is present in feature map, otherwise it is rejected
     """
 
-    def __init__(self, task, feature_stats_file=None, feature_map_file=None):
+    def __init__(self, task, feature_stats_file=None, feature_map_file=None,
+                 test_mode=False):
+
         self._feature_emitter = FeatureEmitter(task, ns_join=True)
         self._feature_map_file = feature_map_file
+
+        self._test_mode = test_mode
+        print "test mode = %s" % str(self._test_mode)
 
         print "reading feature map file from %s" % self._feature_map_file
         self._feature_map = read_feature_map(self._feature_map_file)
@@ -234,7 +246,11 @@ class VWManualFormatter(VWFormatter):
         for num_example, example in enumerate(examples):
             example_vw_line = self._process_example(example)
 
-            class_label = normalize_label(getattr(example, self._click_field), self._loss)
+            if self._test_mode:
+                class_label = -1
+            else:
+                class_label = normalize_label(getattr(example, self._click_field), self._loss)
+
             buffer.write("%s |%s" % (class_label, example_vw_line))
 
             #buffer.write(" %s" % self._feature_map["bias"][""])
