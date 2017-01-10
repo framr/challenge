@@ -8,7 +8,6 @@ from outbrain.vw.apply import VWAutoPredictor, merge_predictions
 
 if __name__ == "__main__":
 
-
     argparser = ArgumentParser()
     argparser.add_argument("-f", dest="formatted", type=str, default=None, help="vw formatted input file")
     argparser.add_argument("-i", dest="input", type=str, default=None, help="original input file")
