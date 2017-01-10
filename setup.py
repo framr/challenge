@@ -1,11 +1,9 @@
 import shlex
 import sys
 
+from Cython.Build import cythonize
 from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
-from Cython.Build import cythonize
-
-
 
 with open('requirements.txt') as fd:
     requirements = [line.rstrip() for line in fd]

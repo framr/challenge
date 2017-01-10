@@ -1,0 +1,2 @@
+ #!/bin/bash
+ python -m cProfile -s cumulative ./profile_vwformatter.py -i ./fixtures/joined_clicks_all_meta_preprocessed.csv_100k -t fixtures/nb_27_mshows5_l2_20_pass_200.yml --fstats ./output/profiling_feature_stats.csv 

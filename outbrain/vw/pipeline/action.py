@@ -5,6 +5,7 @@ from outbrain.metrics.common import compute_metrics
 from outbrain.preprocess.mapper import Join, ProcessGeoData, CountAdsInBlock
 from outbrain.vw.apply import VWAutoPredictor, merge_predictions
 from outbrain.vw.formatter import convert_csv2vw
+from outbrain.vw.formatter_fast import convert_csv2vw_fast
 from outbrain.vw.learn import learn_vw
 from outbrain.vw.vwutil_fast import create_feature_stats_file_fast
 
@@ -46,7 +47,7 @@ def action__prepare_log_for_vw(task, mbus, use_cache=False):
     if use_cache and os.path.isfile(outfile):
         print "learn outfile already exists, skipping operation and using cache"
     else:
-        convert_csv2vw(infile,
+        convert_csv2vw_fast(infile,
                        mbus.learn_vw_file,
                        task,
                        feature_stats_file=mbus.feature_stats,
