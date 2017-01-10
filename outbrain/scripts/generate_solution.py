@@ -28,7 +28,7 @@ if __name__ == "__main__":
     argparser.add_argument("-o", dest="output", type=str, default=None, required=True,
                            help="output file")
     argparser.add_argument("--pred", dest="prediction", type=str, default="sigmoid_vw",
-                           help="output file")
+                           help="field with prediction")
 
     args = argparser.parse_args()
 

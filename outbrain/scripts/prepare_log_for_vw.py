@@ -12,8 +12,8 @@ def get_task(args):
     if args.task:
         print "using task from file %s" % args.task
         task = yaml.load(open(args.task).read())
-    elif args.model:
-        task_file = os.path.join(args.model, "task.yml")
+    elif args.model_path:
+        task_file = os.path.join(args.model_path, "task.yml")
         print "using task from file %s" % task_file
         task = yaml.load(open(task_file).read())
     else:
@@ -28,9 +28,9 @@ def get_feature_stats(args):
     if args.feature_stats:
         print "using feature stats from file %s" % args.feature_stats
         feature_stats = args.feature_stats
-    elif args.model:
-        print "looking for feature_stats.csv in path %s" % args.model
-        candidate = os.path.join(args.model, "feature_stats.csv")
+    elif args.model_path:
+        print "looking for feature_stats.csv in path %s" % args.model_path
+        candidate = os.path.join(args.model_path, "feature_stats.csv")
         if os.path.isfile(candidate):
             print "success"
             feature_stats = candidate
@@ -49,9 +49,9 @@ def get_feature_map(args):
     if args.feature_map:
         print "using feature map from file %s" % args.feature_map
         feature_map = args.feature_map
-    elif args.model:
-        print "looking for feature_map.csv in path %s" % args.model
-        candidate = os.path.join(args.model, "feature_map.csv")
+    elif args.model_path:
+        print "looking for feature_map.csv in path %s" % args.model_path
+        candidate = os.path.join(args.model_path, "feature_map.csv")
         if os.path.isfile(candidate):
             print "success"
             feature_map = candidate
