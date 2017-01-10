@@ -73,6 +73,7 @@ if __name__ == "__main__":
     argparser.add_argument("--model", dest="model_path", type=str, default=None, help="path with vw model")
     argparser.add_argument("--task", dest="task", type=str, default=None, help="task yml")
     argparser.add_argument("--fstats", dest="feature_stats", type=str, default=None, help="feature_stats file")
+    argparser.add_argument("--fmap", dest="feature_map", type=str, default=None, help="feature_map file")
 
     args = argparser.parse_args()
 
