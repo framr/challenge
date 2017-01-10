@@ -30,9 +30,6 @@ class PyTest(TestCommand):
         errno = pytest.main(shlex.split(self.pytest_args))
         sys.exit(errno)
 
-#ext_modules=[
-#    Extension("vwutil_fast", )
-#]
 
 setup(name='outbrain',
       version='0.0.1',

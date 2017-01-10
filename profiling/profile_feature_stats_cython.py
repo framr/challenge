@@ -3,7 +3,7 @@ import os
 import yaml
 from argparse import ArgumentParser
 
-from outbrain.vw.vwutil_fast import create_feature_stats_file
+from outbrain.vw.vwutil_fast import create_feature_stats_file_fast
 
 if __name__ == "__main__":
 
@@ -16,5 +16,5 @@ if __name__ == "__main__":
     task = yaml.load(open(args.task).read())
 
 
-    create_feature_stats_file(args.infile, task, feature_stats)
+    create_feature_stats_file_fast(args.infile, task, feature_stats)
 

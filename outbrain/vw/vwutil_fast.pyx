@@ -20,7 +20,7 @@ def compute_feature_stats(csv_file, task, ns_join_sentinel="^"):
     return feature_stats
 
 
-def create_feature_stats_file(csv_file, task, outfile, ns_join_sentinel="^"):
+def create_feature_stats_file_fast(csv_file, task, outfile, ns_join_sentinel="^"):
 
     stats = compute_feature_stats(csv_file, task, ns_join_sentinel=ns_join_sentinel)
     with open(outfile, "w") as out:
@@ -28,4 +28,3 @@ def create_feature_stats_file(csv_file, task, outfile, ns_join_sentinel="^"):
         for ns, ns_stats in stats.iteritems():
             for feature, shows in ns_stats.iteritems():
                 out.write("%s,%s,%s\n" % (ns, feature, shows))
-

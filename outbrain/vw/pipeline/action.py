@@ -8,6 +8,9 @@ from outbrain.vw.formatter import convert_csv2vw
 from outbrain.vw.learn import learn_vw
 from outbrain.vw.vwutil import *
 
+#from outbrain.vw.vwutil_fast import create_feature_stats_file_fast
+
+
 __all__ = []
 def export(func):
     __all__.append(func.__name__)
