@@ -41,6 +41,7 @@ if __name__ == "__main__":
         ProcessGeoData("geo_location")
         ]
 
+
     for join_file, field, join_key in JOIN_CONF:
         reducers.append(
             Join(

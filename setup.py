@@ -1,6 +1,7 @@
 import shlex
 import sys
 
+from Cython.Build import cythonize
 from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
 
@@ -29,6 +30,9 @@ class PyTest(TestCommand):
         errno = pytest.main(shlex.split(self.pytest_args))
         sys.exit(errno)
 
+#ext_modules=[
+#    Extension("vwutil_fast", )
+#]
 
 setup(name='outbrain',
       version='0.0.1',
@@ -46,5 +50,6 @@ setup(name='outbrain',
                'outbrain/scripts/vw_pipeline_generator.py',
                'outbrain/scripts/preprocess_common.py',
                'outbrain/scripts/filter_categories.py',
-               ]
+               ],
+      ext_modules=cythonize("outbrain/vw/*.pyx")
 )
