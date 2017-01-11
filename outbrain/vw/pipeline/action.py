@@ -7,7 +7,8 @@ from outbrain.vw.apply import VWAutoPredictor, merge_predictions
 from outbrain.vw.formatter import convert_csv2vw
 from outbrain.vw.formatter_fast import convert_csv2vw_fast
 from outbrain.vw.learn import learn_vw
-from outbrain.vw.vwutil_fast import create_feature_stats_file_fast
+from outbrain.vw.vwutil_fast import create_feature_stats_file_fast, create_feature_map_file_fast
+
 
 __all__ = []
 def export(func):
@@ -19,8 +20,13 @@ def export(func):
 def action__compute_feature_stats(task, mbus, use_cache=False):
 
     mbus.feature_stats = None
-    if task.get("min_shows", 0) <= 1 and not task["create_feature_stats"]:
+    if task["learn"]["vw"]["hashing_mode"] == "manual":
+        print "explicit feature_stats is not needed in manual mode"
         return
+    if task.get("min_shows", 0) <= 1 and not task["create_feature_stats"]:
+        print "mode is auto, but min_shows feature is switched off and create_feature_stats flag is not set"
+        return
+
 
     mbus.feature_stats = os.path.join(os.getcwd(), "feature_stats.csv")
     if use_cache and os.path.isfile(mbus.feature_stats):
@@ -33,7 +39,21 @@ def action__compute_feature_stats(task, mbus, use_cache=False):
 
 @export
 def action__compute_feature_map(task, mbus, use_cache=False):
+
     mbus.feature_map = None
+    if (not task.get("create_feature_map", False)
+        and not (task["learn"]["vw"]["hashing_mode"] == "manual")):
+        print "skipping calculating feature map file"
+        return
+
+    mbus.feature_map = os.path.join(os.getcwd(), "feature_map.csv")
+    if use_cache and os.path.isfile(mbus.feature_map):
+        print "ouput feature map already exists, using it from cache %s" % mbus.feature_map
+    else:
+        print "creating feature map file %s" % mbus.feature_map
+        infile = task["learn"]["learn_file"]
+        create_feature_map_file_fast(infile, task, mbus.feature_map)
+
 
 @export
 def action__prepare_log_for_vw(task, mbus, use_cache=False):

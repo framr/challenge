@@ -2,7 +2,7 @@ import pytest
 
 from outbrain.csvutil.reader import make_example_cls
 from outbrain.vw.formatter import VWAutoFormatter, VWManualFormatter
-
+import outbrain.vw.formatter_fast as formatter_fast
 
 
 @pytest.fixture()
@@ -105,6 +105,12 @@ def test_vw_manual_formatter1(task1, examples_and_vw_lines_for_manualformatter_t
         assert result == vw_line
 
 
+def test_vw_manual_formatter_fast1(task1, examples_and_vw_lines_for_manualformatter_task1_feature_map1, feature_map1):
+
+    formatter = formatter_fast.VWManualFormatter(task1, feature_map_file=task1["feature_map"])
+    for example, vw_line in examples_and_vw_lines_for_manualformatter_task1_feature_map1:
+        result = formatter([example]).strip()
+        assert result == vw_line
 
 
 

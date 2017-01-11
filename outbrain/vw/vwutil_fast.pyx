@@ -4,21 +4,6 @@ from .feature_fast import FeatureEmitter
 from ..csvutil.reader import csv_file_iter
 
 
-def read_feature_map(filename):
-    """
-    feature_map format:
-    namespace,feature,fid
-
-    fid is some feature id, for instance it could be a hash of (namespace, feature)
-    """
-    feature_map = defaultdict(dict)
-    with open(filename) as infile:
-        for example in csv_file_iter(infile):
-            feature_map[example.namespace][example.feature] = int(example.fid)
-
-    return feature_map
-
-
 def read_feature_stats(filename):
     """
     assume here feature_stats format:
@@ -42,7 +27,6 @@ def read_feature_stats(filename):
     return feature_stats
 
 
-
 def compute_feature_stats(csv_file, task, ns_join_sentinel="^"):
 
     emitter = FeatureEmitter(task, ns_join=True, ns_join_sentinel=ns_join_sentinel)
@@ -64,7 +48,40 @@ def create_feature_stats_file_fast(csv_file, task, outfile, ns_join_sentinel="^"
 
     stats = compute_feature_stats(csv_file, task, ns_join_sentinel=ns_join_sentinel)
     with open(outfile, "w") as out:
-        out.write("namespace,feature,shows\n")
+        out.write("namespace,feature,\n")
         for ns, ns_stats in stats.iteritems():
             for feature, shows in ns_stats.iteritems():
                 out.write("%s,%s,%s\n" % (ns, feature, shows))
+
+
+def read_feature_map(filename):
+    """
+    feature_map format:
+    namespace,feature,fid
+
+    fid is some feature id, for instance it could be a hash of (namespace, feature)
+    """
+    feature_map = defaultdict(dict)
+    with open(filename) as infile:
+        for example in csv_file_iter(infile):
+            feature_map[example.namespace][example.feature] = int(example.fid)
+
+    return feature_map
+
+
+def create_feature_map_file_fast(csv_file, task, outfile, ns_join_sentinel="^", min_shows=1,
+                            type="enumeration"):
+
+    if type != "enumeration":
+        raise NotImplementedError
+
+    fid = 0
+    stats = compute_feature_stats(csv_file, task, ns_join_sentinel=ns_join_sentinel)
+    with open(outfile, "w") as out:
+        out.write("namespace,feature,fid\n")
+        for ns, ns_stats in stats.iteritems():
+            for feature, shows in ns_stats.iteritems():
+
+                if shows >= min_shows:
+                    out.write("%s,%s,%s\n" % (ns, feature, fid))
+                    fid += 1

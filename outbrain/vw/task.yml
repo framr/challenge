@@ -41,7 +41,6 @@ learn:
     learn_options: "--holdout_off --termination 0.0"
     hashing_mode: auto
 
-
   crr:
     group_key: display_id
     active: false
