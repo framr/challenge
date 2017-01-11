@@ -39,7 +39,7 @@ Including a feature but omitting its value means that its value is 1.
 
 from cStringIO import StringIO
 
-from .feature import FeatureEmitter
+from .feature_fast import FeatureEmitter
 from .vwhash import truncate_to_num_bits
 from .vwutil_fast import read_feature_stats, read_feature_map
 from ..csvutil.reader import csv_file_iter
@@ -225,8 +225,11 @@ class VWManualFormatter(VWFormatter):
         """
 
         buffer = StringIO()
+
+        cdef list features
+        cdef list example_features
         example_features = self._feature_emitter(example)
-        print example_features
+
         for namespace, ns_features in example_features:
             # truncation to num_bits is somewhat excessive here
             # we use it here for clarity (?)
