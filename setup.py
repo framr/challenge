@@ -50,7 +50,8 @@ setup(name='outbrain',
                'outbrain/scripts/filter_categories.py',
                'outbrain/scripts/prepare_log_for_vw.py',
                'outbrain/scripts/apply_vw_model_auto.py',
-               'outbrain/scripts/generate_solution.py'
+               'outbrain/scripts/generate_solution.py',
+               'outbrain/scripts/replace_missing.py'
                ],
       ext_modules=cythonize("outbrain/vw/*.pyx")
 )

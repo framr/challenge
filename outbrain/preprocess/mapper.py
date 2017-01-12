@@ -71,6 +71,7 @@ class ProcessGeoData(Mapper):
     def __init__(self, field="geo_location"):
         self._field = field
         self._add_fields = ["geo_country", "geo_state", "geo_dma"]
+
     def __call__(self, examples):
 
         for example in examples:
