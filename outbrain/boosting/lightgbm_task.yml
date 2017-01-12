@@ -1,0 +1,47 @@
+task_id: my_task1
+click_field: clicked
+weight_field:
+
+pipeline:
+#  - action__compute_feature_stats
+#  - action__compute_feature_map
+#  - action__prepare_log_for_vw
+#  - action__learn_vw
+#  - action__apply_vw
+#  - action__compute_metrics
+#  - action__save_message_bus
+
+group_field: display_id
+
+learn:
+  lightgbm:
+    boosting_type: gbdt
+    objective: binary
+    #objective: lambdarank
+    #group: "name:display_id"
+
+    num_trees: 100
+    num_leaves: 31
+    max_depth: 6
+
+    #categorical_feature: "name:ad_id,document_id"
+    #metric: {'l2', 'auc'},
+
+    learning_rate: 0.05
+    feature_fraction: 0.9
+    bagging_fraction: 0.8
+    bagging_freq: 5
+
+    verbose: 0
+    num_threads: 4
+
+  learn_file:
+
+
+test:
+  test_file:
+
+metrics:
+  class_field: clicked
+  predictions_field: sigmoid_prediction
+  group_field: display_id
