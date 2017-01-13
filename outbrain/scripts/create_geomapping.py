@@ -6,7 +6,7 @@ import sys
 def dump_mapping(mapping, geoname, outfilename):
 
     with open(outfilename, "w") as outfile:
-        outfile.write("%s,%s_fid\n" % geoname)
+        outfile.write("%s,%s_fid\n" % (geoname, geoname))
 
         for key, fid in mapping.iteritems():
             outfile.write("%s,%s\n" % (key, str(fid)))
