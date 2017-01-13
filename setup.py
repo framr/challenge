@@ -51,7 +51,8 @@ setup(name='outbrain',
                'outbrain/scripts/prepare_log_for_vw.py',
                'outbrain/scripts/apply_vw_model_auto.py',
                'outbrain/scripts/generate_solution.py',
-               'outbrain/scripts/replace_missing.py'
+               'outbrain/scripts/replace_missing.py',
+               'outbrain/scripts/create_geomapping.py'
                ],
       ext_modules=cythonize("outbrain/vw/*.pyx")
 )
