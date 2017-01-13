@@ -1,10 +1,9 @@
 import shlex
 import sys
 
+from Cython.Build import cythonize
 from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
-from Cython.Build import cythonize
-
 
 with open('requirements.txt') as fd:
     requirements = [line.rstrip() for line in fd]
@@ -52,7 +51,8 @@ setup(name='outbrain',
                'outbrain/scripts/apply_vw_model_auto.py',
                'outbrain/scripts/generate_solution.py',
                'outbrain/scripts/replace_missing.py',
-               'outbrain/scripts/create_geomapping.py'
+               'outbrain/scripts/create_geomapping.py',
+               'outbrain/scripts/preprocess_lgbm.py'
                ],
       ext_modules=cythonize("outbrain/vw/*.pyx")
 )

@@ -29,13 +29,19 @@ class Join(Mapper):
     def __init__(self,
                  join_file=None,
                  join_key=None,
-                 fields=None
+                 fields=None,
+                 missing_key=None
                  ):
         self._join_file = join_file
         self._join_key = join_key
         self._fields = fields
         self._data = self._read_join_file(join_file)
         self._add_fields = fields
+
+        if missing_key is None:
+            self._missing_key = []
+        else:
+            self._missing_key = [str(missing_key)]
 
     @property
     def add_fields(self):
@@ -59,7 +65,7 @@ class Join(Mapper):
             for field in self._add_fields:
                 #print "field=%s" % field
                 key = self._get_key(example)
-                value = " ".join(self._data[field].get(key, []))
+                value = " ".join(self._data[field].get(key, self._missing_key))
                 setattr(example, field, value)
                 #print example
 
@@ -116,3 +122,75 @@ class CountAdsInBlock(MapReducer):
         ads_count = len(examples_group)
         for example in examples_group:
             example.ads_count = ads_count
+
+
+@export
+class ProcessMissing(Mapper):
+    def __init__(self, columns, missing_key="-1"):
+        self._columns = columns
+        self._missing_key = missing_key
+        self._add_fields = []
+
+    def __call__(self, examples):
+
+        for example in examples:
+            for col in self._columns:
+                value = getattr(example, col)
+                if not value:
+                    setattr(example, self._missing_key)
+
+
+def ctr_func(clicks, shows, a=1.0, ctr0=1/5.0):
+
+    if clicks == 0.0 and shows == 0.0:
+        ctr = ctr0 # missing value
+    else:
+        ctr = (clicks + a) / (shows + a / ctr0)
+    return ctr
+
+@export
+class ComputeStatFactors(Mapper):
+    def __init__(self, stat_keys, smooth_conf=None, ctr0=0.2):
+        self._stat_keys = stat_keys
+
+        self._add_fields = []
+        for stat_key in stat_keys:
+            self._add_fields.append("ctr_stat1_%s" % stat_key)
+            self._add_fields.append("ctr_stat2_%s" % stat_key)
+
+        self._smooth_conf = smooth_conf or {}
+        self._ctr0 = ctr0
+
+    def _get_key_shows(self, key, example):
+        value = getattr(example, "%s_shows")
+        if not value:
+            return 0.0
+        else:
+            return float(value)
+
+    def _get_key_clicks(self, key, example):
+        value = getattr(example, "%s_clicks")
+        if not value:
+            return 0.0
+        else:
+            return float(value)
+
+    def __call__(self, examples):
+
+        for example in examples:
+            for stat_key in self._stat_keys:
+                shows = self._get_key_shows(example, stat_key)
+                clicks = self._get_key_clicks(example, stat_key)
+
+                ctr0 = self._ctr0
+                if stat_key in self._smooth_conf:
+                    smooth_key = self._smooth_conf[stat_key]
+                    parent_shows = self._get_key_shows(example, smooth_key)
+                    parent_clicks = self._get_key_clicks(example, smooth_key)
+                    ctr0 = ctr_func(parent_clicks, parent_shows, 0.5, ctr0=self._ctr0)
+
+                ctr1 = ctr_func(clicks, shows, 0.5, ctr0=ctr0)
+                ctr2 = ctr_func(clicks, shows, 2.0, ctr0=ctr0)
+                setattr(example, "ctr_stat_%s_sm1" % stat_key, str(ctr1))
+                setattr(example, "ctr_stat_%s_sm2" % stat_key, str(ctr2))
+

@@ -8,18 +8,18 @@ from outbrain.preprocess.mapper import *
 
 # Sorry for hardcoding, we are running out of time!
 JOIN_CONF=[
-    ("/home/fram/kaggle/outbrain/playground/input/documents_meta/ad_documents_categories_gt0.5.csv", "ad_category05_id", "ad_document_id"),
-    ("/home/fram/kaggle/outbrain/playground/input/documents_meta/ad_documents_categories_gt0.9.csv", "ad_category09_id", "ad_document_id"),
-    ("/home/fram/kaggle/outbrain/playground/input/documents_meta/ad_documents_entities_gt0.9.csv", "ad_entity09_id", "ad_document_id"),
-    ("/home/fram/kaggle/outbrain/playground/input/documents_meta/ad_documents_entities_gt0.5.csv", "ad_entity05_id", "ad_document_id"),
-    ("/home/fram/kaggle/outbrain/playground/input/documents_meta/ad_documents_topics_gt0.05.csv", "ad_topic005_id", "ad_document_id"),
-    ("/home/fram/kaggle/outbrain/playground/input/documents_meta/ad_documents_topics_gt0.1.csv", "ad_topic01_id", "ad_document_id"),
-    ("/home/fram/kaggle/outbrain/playground/input/documents_meta/documents_categories_gt0.5.csv", "category05_id", "document_id"),
-    ("/home/fram/kaggle/outbrain/playground/input/documents_meta/documents_categories_gt0.9.csv", "category09_id", "document_id"),
-    ("/home/fram/kaggle/outbrain/playground/input/documents_meta/documents_entities_gt0.9.csv", "entity09_id", "document_id"),
-    ("/home/fram/kaggle/outbrain/playground/input/documents_meta/documents_entities_gt0.5.csv", "entity05_id", "document_id"),
-    ("/home/fram/kaggle/outbrain/playground/input/documents_meta/documents_topics_gt0.05.csv", "topic005_id", "document_id"),
-    ("/home/fram/kaggle/outbrain/playground/input/documents_meta/documents_topics_gt0.1.csv", "topic01_id", "document_id")
+    ("/mnt/diomed/home/fram/kaggle/outbrain/playground/input/documents_meta/ad_documents_categories_gt0.5.csv", "ad_category05_id", "ad_document_id"),
+    ("/mnt/diomed/home/fram/kaggle/outbrain/playground/input/documents_meta/ad_documents_categories_gt0.9.csv", "ad_category09_id", "ad_document_id"),
+    ("/mnt/diomed/home/fram/kaggle/outbrain/playground/input/documents_meta/ad_documents_entities_gt0.9.csv", "ad_entity09_id", "ad_document_id"),
+    ("/mnt/diomed/home/fram/kaggle/outbrain/playground/input/documents_meta/ad_documents_entities_gt0.5.csv", "ad_entity05_id", "ad_document_id"),
+    ("/mnt/diomed/home/fram/kaggle/outbrain/playground/input/documents_meta/ad_documents_topics_gt0.05.csv", "ad_topic005_id", "ad_document_id"),
+    ("/mnt/diomed/home/fram/kaggle/outbrain/playground/input/documents_meta/ad_documents_topics_gt0.1.csv", "ad_topic01_id", "ad_document_id"),
+    ("/mnt/diomed/home/fram/kaggle/outbrain/playground/input/documents_meta/documents_categories_gt0.5.csv", "category05_id", "document_id"),
+    ("/mnt/diomed/home/fram/kaggle/outbrain/playground/input/documents_meta/documents_categories_gt0.9.csv", "category09_id", "document_id"),
+    ("/mnt/diomed/home/fram/kaggle/outbrain/playground/input/documents_meta/documents_entities_gt0.9.csv", "entity09_id", "document_id"),
+    ("/mnt/diomed/home/fram/kaggle/outbrain/playground/input/documents_meta/documents_entities_gt0.5.csv", "entity05_id", "document_id"),
+    ("/mnt/diomed/home/fram/kaggle/outbrain/playground/input/documents_meta/documents_topics_gt0.05.csv", "topic005_id", "document_id"),
+    ("/mnt/diomed/home/fram/kaggle/outbrain/playground/input/documents_meta/documents_topics_gt0.1.csv", "topic01_id", "document_id")
 ]
 
 

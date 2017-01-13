@@ -1,0 +1,32 @@
+stat_factors:
+  keys:
+    - ad_document_id
+    - ad_id
+    - ad_publisher_id
+    - ad_source_id
+    - advertiser_id
+    - campaign_id
+    - document_id
+    - geo_location
+    - platform
+    - publisher_id
+    - source_id
+    - document_id^ad_id
+    - document_id^ad_document_id
+    - document_id^campaign_id
+    - document_id^ad_publisher_id
+    - source_id^ad_id
+    - source_id^ad_document_id
+    - source_id^campaign_id
+    - publisher_id^ad_id
+    - publisher_id^ad_document_id
+    - platform^ad_id
+    - platform^ad_document_id
+
+  smooth_conf:
+    ad_id: campaign_id
+    campaign_id: advertiser_id
+    ad_document_id: ad_source_id
+    ad_source_id: ad_publisher_id
+    document_id^ad_id: document_id^campaign_id
+    document_id^ad_document_id: source_id^campaign_id
