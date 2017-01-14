@@ -77,6 +77,8 @@ def create_feature_map_file_fast(csv_file, task, outfile, ns_join_sentinel="^", 
 
     fid = 0
     stats = compute_feature_stats(csv_file, task, ns_join_sentinel=ns_join_sentinel)
+
+    print "creating feature_map with min_shows threshold %d" % min_shows
     with open(outfile, "w") as out:
         out.write("namespace,feature,fid\n")
         for ns, ns_stats in stats.iteritems():
