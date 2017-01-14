@@ -210,7 +210,7 @@ class VWManualFormatter(VWFormatter):
 
         buffer = StringIO()
         example_features = self._feature_emitter(example)
-        print example_features
+        #print example_features
         for namespace, ns_features in example_features:
             # truncation to num_bits is somewhat excessive here
             # we use it here for clarity (?)

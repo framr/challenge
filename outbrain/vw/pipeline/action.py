@@ -86,7 +86,7 @@ def action__prepare_log_for_vw(task, mbus, use_cache=False):
         if use_cache and os.path.isfile(outfile):
             print "test outfile already exists, skipping operation and using cache"
         else:
-            convert_csv2vw(infile,
+            convert_csv2vw_fast(infile,
                            mbus.test_vw_file,
                            task,
                            feature_stats_file=mbus.feature_stats,
@@ -194,11 +194,3 @@ def action__preprocess(task, mbus, use_cache=False):
         ProcessGeoData()
     ]
     #apply_mapreducers(reducers=reducers)
-
-
-
-
-
-
-
-
