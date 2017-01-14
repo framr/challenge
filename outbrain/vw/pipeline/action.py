@@ -52,7 +52,7 @@ def action__compute_feature_map(task, mbus, use_cache=False):
     else:
         print "creating feature map file %s" % mbus.feature_map
         infile = task["learn"]["learn_file"]
-        create_feature_map_file_fast(infile, task, mbus.feature_map)
+        create_feature_map_file_fast(infile, task, mbus.feature_map, min_shows=task["min_shows"])
 
 
 @export

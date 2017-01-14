@@ -82,6 +82,6 @@ def create_feature_map_file_fast(csv_file, task, outfile, ns_join_sentinel="^", 
         for ns, ns_stats in stats.iteritems():
             for feature, shows in ns_stats.iteritems():
 
-                if shows >= min_shows:
+                if int(shows) >= int(min_shows):
                     out.write("%s,%s,%s\n" % (ns, feature, fid))
                     fid += 1
