@@ -10,9 +10,13 @@ CTR0 = 1.0 / 5.0
 
 # Sorry for hardcoding, we are running out of time!
 JOIN_CONF=[
-    ("/mnt/diomed/home/fram/kaggle/outbrain/playground/input/geomapping/geomapping_country", "geo_country_fid", "geo_country"),
-    ("/mnt/diomed/home/fram/kaggle/outbrain/playground/input/geomapping/geomapping_country", "geo_state_fid", "geo_state"),
-    ("/mnt/diomed/home/fram/kaggle/outbrain/playground/input/geomapping/geomapping_country", "geo_dma_fid", "geo_dma")
+#    ("/mnt/diomed/home/fram/kaggle/outbrain/playground/input/geomapping/geomapping_country", "geo_country_fid", "geo_country"),
+#    ("/mnt/diomed/home/fram/kaggle/outbrain/playground/input/geomapping/geomapping_state", "geo_state_fid", "geo_state"),
+#    ("/mnt/diomed/home/fram/kaggle/outbrain/playground/input/geomapping/geomapping_dma", "geo_dma_fid", "geo_dma")
+    ("/home/fram/kaggle/outbrain/playground/input/geomapping/geomapping_country", "geo_country_fid", "geo_country"),
+    ("/home/fram/kaggle/outbrain/playground/input/geomapping/geomapping_state", "geo_state_fid", "geo_state"),
+    ("/home/fram/kaggle/outbrain/playground/input/geomapping/geomapping_dma", "geo_dma_fid", "geo_dma")
+
 ]
 
 
@@ -24,13 +28,14 @@ if __name__ == "__main__":
                            help="input file")
     argparser.add_argument("-o", dest="output", type=str, default=None,
                            help="output file")
-    args = argparser.parse_args("--stat", dest="stat_conf", type=str, default=None, required=True,
+    args = argparser.add_argument("--task", dest="task", type=str, default=None, required=True,
                                 help="yml config for stats keys")
+
     args = argparser.parse_args()
 
 
-    stat_conf = yaml.load(open(args.stat_conf).read())
-
+    task = yaml.load(open(args.task).read())
+    stat_conf = yaml.load(open(task["stat_conf"]).read())
 
     reducers = [
         CountAdsInBlock(),
@@ -55,7 +60,7 @@ if __name__ == "__main__":
         )
 
     reducers.append(
-        ProcessMissing([])
+        ProcessMissing()
     )
 
     streamer = ReduceStreamer(
@@ -64,4 +69,5 @@ if __name__ == "__main__":
         infilename=args.input,
         outfilename=args.output
     )
+
     streamer()

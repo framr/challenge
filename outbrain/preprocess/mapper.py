@@ -11,11 +11,15 @@ def export(func):
 
 
 class Mapper(object):
+    NAME = "Mapper"
+
     @property
     def add_fields(self):
         return self._add_fields
 
 class MapReducer(object):
+    NAME = "MapReducer"
+
     @property
     def add_fields(self):
         return self._add_fields
@@ -26,6 +30,8 @@ class Join(Mapper):
     """
     Plain old MapJoin
     """
+    NAME = "Join"
+
     def __init__(self,
                  join_file=None,
                  join_key=None,
@@ -42,6 +48,7 @@ class Join(Mapper):
             self._missing_key = []
         else:
             self._missing_key = [str(missing_key)]
+
 
     @property
     def add_fields(self):
@@ -74,6 +81,8 @@ class ProcessGeoData(Mapper):
     """
     Mapper parsing geo data
     """
+
+    NAME = "ProcessGeoData"
     def __init__(self, field="geo_location"):
         self._field = field
         self._add_fields = ["geo_country", "geo_state", "geo_dma"]
@@ -98,6 +107,7 @@ class ProcessGeoData(Mapper):
 @export
 class ProcessTimestamp(Mapper):
 
+    NAME = "ProcessTimeStamp"
     def __init__(self, field="timestamp"):
         self._field = field
         self._add_fields = ["date_weekday", "date_hour"]
@@ -115,6 +125,8 @@ class CountAdsInBlock(MapReducer):
     This is a pure reducer, i.e. we have to guarantee
     that all examples with one key are in a batch
     """
+
+    NAME = "CountAdsInBlock"
     def __init__(self):
         self._add_fields = ["ads_count"]
 
@@ -126,18 +138,20 @@ class CountAdsInBlock(MapReducer):
 
 @export
 class ProcessMissing(Mapper):
-    def __init__(self, columns, missing_key="-1"):
-        self._columns = columns
+    NAME = "ProcessMissing"
+    def __init__(self, columns=None, missing_key="-1"):
+        self._columns = columns or []
         self._missing_key = missing_key
         self._add_fields = []
 
     def __call__(self, examples):
 
         for example in examples:
-            for col in self._columns:
+            check_columns = self._columns or example.keys()
+            for col in check_columns:
                 value = getattr(example, col)
                 if not value:
-                    setattr(example, self._missing_key)
+                    setattr(example, col, self._missing_key)
 
 
 def ctr_func(clicks, shows, a=1.0, ctr0=1/5.0):
@@ -150,26 +164,28 @@ def ctr_func(clicks, shows, a=1.0, ctr0=1/5.0):
 
 @export
 class ComputeStatFactors(Mapper):
+
+    NAME = "ComputeStatFactors"
     def __init__(self, stat_keys, smooth_conf=None, ctr0=0.2):
         self._stat_keys = stat_keys
 
         self._add_fields = []
         for stat_key in stat_keys:
-            self._add_fields.append("ctr_stat1_%s" % stat_key)
-            self._add_fields.append("ctr_stat2_%s" % stat_key)
+            self._add_fields.append("ctr_stat_%s_sm1" % stat_key)
+            self._add_fields.append("ctr_stat_%s_sm2" % stat_key)
 
         self._smooth_conf = smooth_conf or {}
         self._ctr0 = ctr0
 
-    def _get_key_shows(self, key, example):
-        value = getattr(example, "%s_shows")
+    def _get_key_shows(self, example, key):
+        value = getattr(example, "%s_shows" % key)
         if not value:
             return 0.0
         else:
             return float(value)
 
-    def _get_key_clicks(self, key, example):
-        value = getattr(example, "%s_clicks")
+    def _get_key_clicks(self, example, key):
+        value = getattr(example, "%s_clicks" % key)
         if not value:
             return 0.0
         else:
@@ -178,7 +194,9 @@ class ComputeStatFactors(Mapper):
     def __call__(self, examples):
 
         for example in examples:
+            #print example.keys()
             for stat_key in self._stat_keys:
+                print stat_key
                 shows = self._get_key_shows(example, stat_key)
                 clicks = self._get_key_clicks(example, stat_key)
 

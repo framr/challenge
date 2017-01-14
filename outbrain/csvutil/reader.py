@@ -63,7 +63,7 @@ def csv_file_extended_iter(infile):
         yield line, example_cls(*line)
 
 
-def csv_file_group_iter_mutable(infile, group_field, separator=","):
+def csv_file_group_iter_mutable(infile, group_field, separator=",", replace_header=("^", "_")):
     """
     Args:
         infile:
@@ -75,6 +75,9 @@ def csv_file_group_iter_mutable(infile, group_field, separator=","):
 
     # TODO: support multi-field keys
     header = infile.readline().strip().split(separator)
+
+    if replace_header:
+        header = [col.replace(replace_header[0], replace_header[1]) for col in header]
 
     group_field_index = get_column_index_mapping(header)[group_field]
     for group_key, group_iter in groupby(csv.reader(infile),

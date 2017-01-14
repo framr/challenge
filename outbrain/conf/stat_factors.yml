@@ -11,22 +11,22 @@ stat_factors:
     - platform
     - publisher_id
     - source_id
-    - document_id^ad_id
-    - document_id^ad_document_id
-    - document_id^campaign_id
-    - document_id^ad_publisher_id
-    - source_id^ad_id
-    - source_id^ad_document_id
-    - source_id^campaign_id
-    - publisher_id^ad_id
-    - publisher_id^ad_document_id
-    - platform^ad_id
-    - platform^ad_document_id
+    - document_id_ad_id
+    - document_id_ad_document_id
+    - document_id_campaign_id
+    - document_id_ad_publisher_id
+    - source_id_ad_id
+    - source_id_ad_document_id
+    - source_id_campaign_id
+    - publisher_id_ad_id
+    - publisher_id_ad_document_id
+    - platform_ad_id
+    - platform_ad_document_id
 
   smooth_conf:
     ad_id: campaign_id
     campaign_id: advertiser_id
     ad_document_id: ad_source_id
     ad_source_id: ad_publisher_id
-    document_id^ad_id: document_id^campaign_id
-    document_id^ad_document_id: source_id^campaign_id
+    document_id-ad_id: document_id_campaign_id
+    document_id-ad_document_id: source_id_campaign_id

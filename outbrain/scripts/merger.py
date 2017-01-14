@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 
-import sys
+import csv
 from argparse import ArgumentParser
-from subprocess import Popen, PIPE, check_call
+from shutil import copy2
+from subprocess import Popen, PIPE
 from tempfile import NamedTemporaryFile
 
-import csv
-
 CLICKED_FIELD = "clicked"
+CLICKED_FIELD_INDEX = 2
 
 def columns_to_add_to_test(filename, separator=","):
     header = None
@@ -22,7 +22,9 @@ def columns_to_add_to_test(filename, separator=","):
 
     return add_fields
 
-def add_columns_and_strip_header(infilename, outfilename, add_columns=None, separator=","):
+
+def add_columns_and_strip_header(infilename, outfilename, add_columns=None,
+                                 separator=","):
     """
     Extend csv file with new columns and remove header
     Args:
@@ -44,15 +46,12 @@ def add_columns_and_strip_header(infilename, outfilename, add_columns=None, sepa
             column_names, column_values = zip(*add_columns)
             column_names = list(column_names)
             column_values = list(column_values)
-
-#            print add_columns
-#            print column_names, column_values
             header.extend(column_names)
 
             writer = csv.writer(outfile)
             for row in csv.reader(infile):
                 writer.writerow(row + column_values)
-                #print row + column_values
+
 
     return header
 
@@ -90,6 +89,10 @@ if __name__ == '__main__':
                 args.test, test.name, add_columns=add_columns_for_test,
                 separator=args.separator
             )
+
+            copy2(train.name, "train_stripped_header_added_col")
+            copy2(test.name, "test_stripped_header_added_col")
+
 
             print "Resulting train header %s" % train_header
             print "Resulting test header %s" % test_header
