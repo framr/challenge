@@ -1,0 +1,63 @@
+stat_factors:
+  keys:
+    - ad_document_id
+    - ad_id
+    - ad_publisher_id
+    - ad_source_id
+    - advertiser_id
+    - campaign_id
+    - document_id
+#    - geo_location
+    - platform
+    - publisher_id
+    - source_id
+    - document_id_ad_id
+    - document_id_ad_document_id
+    - document_id_campaign_id
+    - document_id_ad_publisher_id
+    - source_id_ad_id
+    - source_id_ad_document_id
+    - source_id_campaign_id
+    - publisher_id_ad_id
+    - publisher_id_ad_document_id
+    - platform_ad_id
+    - platform_ad_document_id
+
+  smooth_conf:
+    ad_id: campaign_id
+    campaign_id: advertiser_id
+    ad_document_id: ad_source_id
+    ad_source_id: ad_publisher_id
+    document_id_ad_id: document_id_campaign_id
+    document_id_ad_document_id: source_id_campaign_id
+
+online_stat_factors:
+  keys:
+    - ad_document_id_1
+    - ad_id_1
+    - ad_publisher_id_1
+    - ad_source_id_1
+    - ad_source_id_05
+    - advertiser_id_1
+    - campaign_id_1
+    - campaign_id_05
+    - document_id_ad_id_1
+    - document_id_ad_document_id_1
+    - document_id_campaign_id_1
+    - document_id_ad_publisher_id_1
+    - source_id_ad_id_1
+    - source_id_ad_document_id_1
+    - source_id_campaign_id_1
+    - publisher_id_ad_id_1
+    - publisher_id_ad_document_id_1
+    - platform_ad_id_1
+    - platform_ad_document_id_1
+    - platform_campaign_id_1
+
+  smooth_conf:
+    ad_id_1: campaign_id_1
+    campaign_id_1: advertiser_id_1
+    ad_document_id_1: ad_source_id_1
+    ad_source_id_1: ad_publisher_id_1
+    document_id_ad_id_1: document_id_campaign_id_1
+    document_id_ad_document_id_1: source_id_campaign_id_1
