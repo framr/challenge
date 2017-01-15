@@ -55,5 +55,5 @@ setup(name='outbrain',
                'outbrain/scripts/create_geomapping.py',
                'outbrain/scripts/preprocess_lgbm.py'
                ],
-      ext_modules=cythonize("outbrain/vw/*.pyx")
+      ext_modules=cythonize("outbrain/*/*.pyx")
 )

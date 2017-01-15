@@ -11,7 +11,7 @@ class ReduceStreamer(object):
     apply bunch of classes (aka mappers or reducers) processing a group of examples.
     """
     def __init__(self, reducers=None, group_field=None, infilename=None, outfilename=None,
-                 separator=",", replace_header=("^", "_")):
+                 separator=",", replace_header=[("^", "_"), ("0.5", "05")]):
         self._reducers = reducers
         self._examples_count = 0
         self._groups_count = 0
@@ -41,7 +41,8 @@ class ReduceStreamer(object):
             header = tmp.readline().strip()
 
         if self._replace_header:
-            header = header.replace(self._replace_header[0], self._replace_header[1])
+            for orig, repl in self._replace_header:
+                header = header.replace(orig, repl)
 
         new_header = "%s%s%s\n" % (header, self._separator,
                                  self._separator.join(self.add_fields))

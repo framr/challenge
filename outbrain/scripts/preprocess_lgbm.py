@@ -4,7 +4,7 @@ import yaml
 from argparse import ArgumentParser
 
 from outbrain.preprocess.common import ReduceStreamer
-from outbrain.preprocess.mapper import *
+from outbrain.preprocess.mapper_fast import *
 
 CTR0 = 1.0 / 5.0
 
@@ -51,7 +51,8 @@ if __name__ == "__main__":
             smooth_conf=stat_conf["online_stat_factors"]["smooth_conf"],
             ctr0=CTR0,
             online=True
-        )
+        ),
+        ComputeRelCTR()
     ]
 
     for join_file, field, join_key in JOIN_CONF:
