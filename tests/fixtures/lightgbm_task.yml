@@ -1,0 +1,49 @@
+task_id: lightgbm_test_task
+click_field: clicked
+weight_field:
+
+pipeline:
+
+stat_conf: ./fixtures/stat_factors.yml
+group_field: display_id
+
+learn:
+  lightgbm:
+    boosting_type: gbdt
+    objective: binary
+    #objective: lambdarank
+    #group: "name:display_id"
+
+    num_trees: 20
+    num_leaves: 31
+    max_depth: 6
+
+    categorical_feature: "name:ads_count,geo_dma"
+    metric: ['binary_logloss', 'auc']
+
+    learning_rate: 0.05
+    feature_fraction: 0.9
+    bagging_fraction: 0.8
+    bagging_freq: 5
+
+    verbose: 0
+    num_threads: 2
+
+  learn_file: /home/fram/kaggle/outbrain/tests/fixtures/joined_clicks_all_meta_preprocessed.csv_1M_missing
+
+factors: [ads_count, geo_dma, date_weekday, date_hour]
+factors_types:
+  ads_count: int
+  geo_country: int
+  geo_state: int
+  geo_dma: int
+  date_weekday: int
+  date_hour: int
+
+test:
+  test_file: /home/fram/kaggle/outbrain/tests/fixtures/joined_clicks_all_meta_preprocessed.csv_10k_missing
+
+metrics:
+  class_field: clicked
+  predictions_field: sigmoid_prediction
+  group_field: display_id
