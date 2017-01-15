@@ -62,7 +62,7 @@ class ReduceStreamer(object):
                     self._groups_count += 1
 
                     for reducer in self._reducers:
-                        print "processing mapreducer %s" % reducer.NAME
+                        #print "processing mapreducer %s" % reducer.NAME
                         reducer(examples_batch)
 
                     self._write_batch_to_stream(examples_batch, out_fields,
