@@ -3,7 +3,7 @@
 import yaml
 from argparse import ArgumentParser
 
-from outbrain.preprocess.common import ReduceStreamer
+from outbrain.preprocess.common_fast import ReduceStreamer
 from outbrain.preprocess.mapper_fast import *
 
 CTR0 = 1.0 / 5.0
