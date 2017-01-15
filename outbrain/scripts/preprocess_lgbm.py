@@ -49,7 +49,8 @@ if __name__ == "__main__":
         ComputeStatFactors(
             stat_conf["online_stat_factors"]["keys"],
             smooth_conf=stat_conf["online_stat_factors"]["smooth_conf"],
-            ctr0=CTR0
+            ctr0=CTR0,
+            online=True
         )
     ]
 

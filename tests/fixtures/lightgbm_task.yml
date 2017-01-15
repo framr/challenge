@@ -4,7 +4,7 @@ weight_field:
 
 pipeline:
 
-stat_conf: ./fixtures/stat_factors.yml
+stat_conf: ./stat_factors_for_lgbm.yml
 group_field: display_id
 
 learn:

@@ -166,7 +166,7 @@ def ctr_func(clicks, shows, a=1.0, ctr0=1/5.0):
 class ComputeStatFactors(Mapper):
 
     NAME = "ComputeStatFactors"
-    def __init__(self, stat_keys, smooth_conf=None, ctr0=0.2):
+    def __init__(self, stat_keys, smooth_conf=None, ctr0=0.2, online=False):
         self._stat_keys = stat_keys
 
         self._add_fields = []
@@ -176,16 +176,23 @@ class ComputeStatFactors(Mapper):
 
         self._smooth_conf = smooth_conf or {}
         self._ctr0 = ctr0
+        self._online = False
+        if online:
+            self._shows_pattern = "shows_%s"
+            self._clicks_pattern = "clicks_%s"
+        else:
+            self._shows_pattern = "%s_clicks"
+            self._clicks_pattern = "%s_shows"
 
     def _get_key_shows(self, example, key):
-        value = getattr(example, "%s_shows" % key)
+        value = getattr(example, self._shows_pattern % key)
         if not value:
             return 0.0
         else:
             return float(value)
 
     def _get_key_clicks(self, example, key):
-        value = getattr(example, "%s_clicks" % key)
+        value = getattr(example, self._clicks_pattern % key)
         if not value:
             return 0.0
         else:
