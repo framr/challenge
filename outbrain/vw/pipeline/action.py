@@ -187,10 +187,4 @@ def action__save_message_bus(task, mbus, use_cache=False):
 
 @export
 def action__preprocess(task, mbus, use_cache=False):
-
-    reducers = [
-        CountAdsInBlock(),
-        Join(),
-        ProcessGeoData()
-    ]
-    #apply_mapreducers(reducers=reducers)
+    pass

@@ -171,8 +171,8 @@ class ComputeStatFactors(Mapper):
 
         self._add_fields = []
         for stat_key in stat_keys:
-            self._add_fields.append("ctr_stat_%s_sm1" % stat_key)
-            self._add_fields.append("ctr_stat_%s_sm2" % stat_key)
+            self._add_fields.append("ctr_%s" % stat_key)
+            #self._add_fields.append("ctr_stat_%s_sm2" % stat_key)
 
         self._smooth_conf = smooth_conf or {}
         self._ctr0 = ctr0
@@ -196,7 +196,7 @@ class ComputeStatFactors(Mapper):
         for example in examples:
             #print example.keys()
             for stat_key in self._stat_keys:
-                print stat_key
+                #print stat_key
                 shows = self._get_key_shows(example, stat_key)
                 clicks = self._get_key_clicks(example, stat_key)
 
@@ -207,8 +207,48 @@ class ComputeStatFactors(Mapper):
                     parent_clicks = self._get_key_clicks(example, smooth_key)
                     ctr0 = ctr_func(parent_clicks, parent_shows, 0.5, ctr0=self._ctr0)
 
-                ctr1 = ctr_func(clicks, shows, 0.5, ctr0=ctr0)
-                ctr2 = ctr_func(clicks, shows, 2.0, ctr0=ctr0)
-                setattr(example, "ctr_stat_%s_sm1" % stat_key, str(ctr1))
-                setattr(example, "ctr_stat_%s_sm2" % stat_key, str(ctr2))
+                #XXX: magic consts (smoothing)
+                ctr = ctr_func(clicks, shows, 0.5, ctr0=ctr0)
+                #ctr2 = ctr_func(clicks, shows, 2.0, ctr0=ctr0)
+                setattr(example, "ctr_%s" % stat_key, str(ctr))
+                #setattr(example, "ctr_stat_%s_sm2" % stat_key, str(ctr2))
+
+
+@export
+class ComputeRelCTR(Mapper):
+
+    NAME = "ComputeRelCTR"
+
+    def __init__(self, ctr0=0.2):
+
+        #XXX: hardcoding
+        stat_keys = [
+            ("document_id_ad_id_1", "document_id_1"),
+            ("document_id_campaign_id_1", "document_id_1"),
+            ("source_id_ad_id_1", "source_id_1"),
+            ("source_id_campaign_id_1", "source_id_1")
+        ]
+
+        self._add_fields = []
+        for stat_key, hit_key in stat_keys:
+            self._add_fields.append("ctr_%s_rel" % stat_key)
+
+        self._ctr0 = ctr0
+
+
+    def _get_ctr(self, example, key):
+        value = getattr(example, "ctr_%s" % key)
+        if not value:
+            return -1.0
+        else:
+            return float(value)
+
+    def __call__(self, examples):
+
+        for example in examples:
+            # print example.keys()
+            for stat_key, hit_key in self._stat_keys:
+                rel_ctr = self._get_ctr(example, stat_key) / self._get_ctr(example, hit_key)
+                setattr(example, "ctr_%s_rel" % stat_key, str(rel_ctr))
+
 

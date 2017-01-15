@@ -45,9 +45,13 @@ if __name__ == "__main__":
             stat_conf["stat_factors"]["keys"],
             smooth_conf=stat_conf["stat_factors"]["smooth_conf"],
             ctr0=CTR0
+        ),
+        ComputeStatFactors(
+            stat_conf["online_stat_factors"]["keys"],
+            smooth_conf=stat_conf["online_stat_factors"]["smooth_conf"],
+            ctr0=CTR0
         )
     ]
-
 
     for join_file, field, join_key in JOIN_CONF:
         reducers.append(
